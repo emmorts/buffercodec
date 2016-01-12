@@ -18,7 +18,7 @@ Encoding to buffer is as simple as this:
 var BufferCodec = require("buffercodec");
 
 var buffer = BufferCodec()
-  .int8(0x1)
+  .uint8(0x1)
   .string('hello world')
   .uint16le(Math.pow(2, 10))
   .uint16le(Math.pow(2, 8))
@@ -80,7 +80,6 @@ Methods
 * `buffer(buffer)`
 * `result()` - compiles the job list into a buffer and returns that buffer
 * `string(data, encoding)` - write a string with the given encoding (default is *utf16*)
-* `int8(data)` - signed 8 bit integer
 * `uint8(data)` - unsigned 8 bit integer
 * `int16le(data)` - signed, little endian 16 bit integer
 * `int16be(data)` - signed, big endian 16 bit integer
