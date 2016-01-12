@@ -45,7 +45,7 @@ var object = BufferCodec(buffer).parse([{
   name: 'posY',
   type: 'uint16le'
 }, {
-  name: 'pi,
+  name: 'pi',
   type: 'float32le'
 }]);
 
