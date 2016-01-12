@@ -1,0 +1,28 @@
+{
+  "name": "buffercodec",
+  "version": "0.1.0",
+  "description": "Buffer codec able to encode or decode primary data types.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emmorts/buffercodec.git"
+  },
+  "keywords": [
+    "encode",
+    "decode",
+    "buffer"
+  ],
+  "author": "Tomas Stropus",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/emmorts/buffercodec/issues"
+  },
+  "homepage": "https://github.com/emmorts/buffercodec#readme",
+  "devDependencies": {
+    "buffer-equal": "^1.0.0",
+    "chai": "^3.4.1"
+  }
+}
