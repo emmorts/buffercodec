@@ -258,17 +258,61 @@ var BufferCodec = (function () {
     function parseItem(element) {
       var templateResult;
       switch (element.type) {
+        case 'int8':
+          templateResult = data.getInt8(this.offset);
+          this.offset += 1;
+          break;
         case 'uint8':
           templateResult = data.getUint8(this.offset);
           this.offset += 1;
+          break;
+        case 'int16le':
+          templateResult = data.getInt16(this.offset, true);
+          this.offset += 2;
           break;
         case 'uint16le':
           templateResult = data.getUint16(this.offset, true);
           this.offset += 2;
           break;
-        case 'floatle':
+        case 'int16be':
+          templateResult = data.getInt16(this.offset, false);
+          this.offset += 2;
+          break;
+        case 'uint16be':
+          templateResult = data.getUint16(this.offset, false);
+          this.offset += 2;
+          break;
+        case 'int32le':
+          templateResult = data.getInt32(this.offset, true);
+          this.offset += 4;
+          break;
+        case 'uint32le':
+          templateResult = data.getUint32(this.offset, true);
+          this.offset += 4;
+          break;
+        case 'int32be':
+          templateResult = data.getInt32(this.offset, false);
+          this.offset += 4;
+          break;
+        case 'uint32be':
+          templateResult = data.getUint32(this.offset, false);
+          this.offset += 4;
+          break;
+        case 'float32le':
           templateResult = data.getFloat32(this.offset, true);
           this.offset += 4;
+          break;
+        case 'float32be':
+          templateResult = data.getFloat32(this.offset, false);
+          this.offset += 4;
+          break;
+        case 'float64le':
+          templateResult = data.getFloat64(this.offset, true);
+          this.offset += 8;
+          break;
+        case 'float64be':
+          templateResult = data.getFloat64(this.offset, false);
+          this.offset += 8;
           break;
         case 'string':
           if (typeof element.length === 'undefined') {
@@ -280,7 +324,7 @@ var BufferCodec = (function () {
           if (!element.encoding || element.encoding === 'utf16') {
             var utf16 = new ArrayBuffer(element.length * 2);
             var utf16view = new Uint16Array(utf16);
-            for (var i = 0; i < element.length; i++ , this.offset += 1) {
+            for (var i = 0; i < element.length; i++ , this.offset += 2) {
               utf16view[i] = data.getUint8(this.offset);
             }
             templateResult = String.fromCharCode.apply(null, utf16view);
