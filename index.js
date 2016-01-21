@@ -361,6 +361,8 @@ BufferCodec.prototype.parse = function (template, transform) {
       case 'array':
         templateResult = parseArray.call(this, data, element.itemTemplate);
         break;
+      default:
+        console.error('Type ' + element.type + ' is not supported.');
     }
 
     if (element.name) {
