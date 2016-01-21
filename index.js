@@ -226,22 +226,32 @@ BufferCodec.prototype.float64be = function (value) {
 BufferCodec.prototype.parse = function (template, transform) {
   if (this.buffer && template) {
     var data = new DataView(this.buffer);
-    var result = {};
+    var result = {}, element = {};
     
-    for (var propertyName in template) {
-      var element = {};
-      element.name = propertyName;
-      
-      if (template[propertyName].constructor === Array) {
-        element.type = 'array'
-        element.itemTemplate = template[propertyName][0];
-      } else if (template[propertyName].constructor === String) {
-        element.type = template[propertyName];
-      } else if (template[propertyName].constructor === Object) {
-        for (var innerPropertyName in template[propertyName]) {
-          element[innerPropertyName] = template[propertyName][innerPropertyName];
+    if (template.constructor === Object) {
+      for (var propertyName in template) {
+        element = {
+          name: propertyName
+        };
+        
+        if (template[propertyName].constructor === Array) {
+          element.type = 'array'
+          element.itemTemplate = template[propertyName][0];
+        } else if (template[propertyName].constructor === String) {
+          element.type = template[propertyName];
+        } else if (template[propertyName].constructor === Object) {
+          for (var innerPropertyName in template[propertyName]) {
+            element[innerPropertyName] = template[propertyName][innerPropertyName];
+          }
         }
+        
+        parseItem.call(this, element, result);
       }
+    } else if (template.constructor === Array) {
+      element = {
+        type: 'array',
+        itemTemplate: template[0]
+      };
       
       parseItem.call(this, element, result);
     }

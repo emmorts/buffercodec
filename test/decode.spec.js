@@ -81,15 +81,13 @@ describe('#decode', function () {
       offset += 2;
     });
     
-    var result = BufferCodec(buffer).parse({
-      test: [{
-        id: 'uint8',
-        value: 'uint16le'
-      }]
-    });
+    var result = BufferCodec(buffer).parse([{
+      id: 'uint8',
+      value: 'uint16le'
+    }]);
     
-    expect(result.test).to.be.ok;
-    expect(result.test).to.deep.equal(objects);
+    expect(result).to.be.ok;
+    expect(result).to.deep.equal(objects);
   });
 
 });
