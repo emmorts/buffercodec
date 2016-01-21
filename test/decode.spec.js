@@ -13,9 +13,11 @@ describe('#decode', function () {
       bufferView[i] = now.charCodeAt(i);
     }
     
-    var string = BufferCodec(buffer).parse({ type: 'string', length: now.length });
+    var result = BufferCodec(buffer).parse({
+      date: { type: 'string', length: now.length }
+    });
     
-    expect(string).to.equal(now);
+    expect(result.date).to.equal(now);
   });
 
   it('should decode a complex object', function () {
@@ -25,21 +27,69 @@ describe('#decode', function () {
     bufferView.setUint16(1, 0xFFFF, true);
     bufferView.setInt32(3, 0x7FFFFFFF, false);
     
-    var obj = BufferCodec(buffer).parse([{
-      name: 'test1',
-      type: 'uint8'
-    }, {
-      name: 'test2',
-      type: 'uint16le'
-    }, {
-      name: 'test3',
-      type: 'int32be'
-    }]);
+    var obj = BufferCodec(buffer).parse({
+      test1: 'uint8',
+      test2: 'uint16le',
+      test3: { type: 'int32be' },
+    });
     
-    expect(obj).to.ok;
+    expect(obj).to.be.ok;
     expect(obj.test1).to.equal(0x01);
     expect(obj.test2).to.equal(0xFFFF);
     expect(obj.test3).to.equal(0x7FFFFFFF);
+  });
+
+  it('should decode a complex object and transform it', function () {
+    var buffer = new ArrayBuffer(7);
+    var bufferView = new DataView(buffer);
+    bufferView.setUint8(0, 0x01);
+    bufferView.setUint16(1, 0xFFFF, true);
+    bufferView.setInt32(3, 0x7FFFFFFF, false);
+    
+    var obj = BufferCodec(buffer).parse({
+      test1: 'uint8',
+      test2: 'uint16le',
+      test3: { type: 'int32be' },
+    }, function (result) {
+      return [
+        result.test1,
+        result.test2,
+        result.test3
+      ];
+    });
+    
+    expect(obj).to.be.ok;
+    expect(obj[0]).to.equal(0x01);
+    expect(obj[1]).to.equal(0xFFFF);
+    expect(obj[2]).to.equal(0x7FFFFFFF);
+  });
+  
+  it('should decode an array', function () {
+    var objects = [1, 2, 3].map(function (number) {
+      return { id: number, value: number*number };
+    });
+    
+    var buffer = new ArrayBuffer(1 + objects.length * 3);
+    var bufferView = new DataView(buffer);
+    var offset = 0;
+    
+    bufferView.setUint8(offset++, objects.length);
+    
+    objects.forEach(function (object) {
+      bufferView.setUint8(offset++, object.id);
+      bufferView.setUint16(offset, object.value, true);
+      offset += 2;
+    });
+    
+    var result = BufferCodec(buffer).parse({
+      test: [{
+        id: 'uint8',
+        value: 'uint16le'
+      }]
+    });
+    
+    expect(result.test).to.be.ok;
+    expect(result.test).to.deep.equal(objects);
   });
 
 });

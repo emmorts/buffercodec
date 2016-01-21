@@ -31,23 +31,13 @@ Decoding above buffer to a single object:
 ```javascript
 var BufferCodec = require("buffercodec");
 
-var object = BufferCodec(buffer).parse([{
-  name: 'opcode',
-  type: 'uint8'
-}, {
-  name: 'name',
-  type: 'string',
-  length: 'hello world'.length
-}, {
-  name: 'posX',
-  type: 'uint16le'
-}, {
-  name: 'posY',
-  type: 'uint16le'
-}, {
-  name: 'pi',
-  type: 'float32le'
-}]);
+var object = BufferCodec(buffer).parse({
+  opcode: 'uint8',
+  name: { type: 'string', length: 'hello world'.length },
+  posX: 'uint16le',
+  posY: 'uint16le',
+  pi: 'float32le'
+});
 
 /*
 object: {
@@ -60,26 +50,14 @@ object: {
 */
 ```
 
-Or you may iterate through buffer like so:
-
-```javascript
-var BufferCodec = require("buffercodec");
-
-var decoder = BufferCodec(buffer);
-
-var opcode = decoder.parse({ type: 'uint8' });  // 0x1
-var name = decoder.parse({ type: 'string', length: 'hello world'.length }); // 'hello world'
-var posX = decoder.parse({ type: 'uint16le' }); // 1024
-var posY = decoder.parse({ type: 'uint16le' }); // 256
-var pi = decoder.parse({ type: 'float32le' });  // 3.1415927410125732
-``` 
-
 Methods
 ---------------
 
 * `buffer(buffer)`
 * `result()` - compiles the job list into a buffer and returns that buffer
-* `string(data, encoding)` - write a string with the given encoding (default is *utf16*)
+* `parse(template[, transformFn])` - parse buffer with given template and apply transform function to the result
+* `string(data[, encoding])` - write a string with the given encoding (default is *utf16*)
+* `int8(data)` - signed 8 bit integer
 * `uint8(data)` - unsigned 8 bit integer
 * `int16le(data)` - signed, little endian 16 bit integer
 * `int16be(data)` - signed, big endian 16 bit integer
