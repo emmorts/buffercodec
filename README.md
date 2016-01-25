@@ -6,6 +6,8 @@ to write basic data types to buffers and other way around. It uses
 [Typed Arrays](https://developer.mozilla.org/en/docs/Web/JavaScript/Typed_arrays) which
 is available on both, browsers and Node environments.
 
+[![Build Status](https://travis-ci.org/emmorts/buffercodec.svg?branch=master)](https://travis-ci.org/emmorts/buffercodec)
+
 Installation
 ------------
 Install this package by running `npm install buffercodec`.
@@ -50,13 +52,40 @@ object: {
 */
 ```
 
+Arrays are also supported, by providing the length of an array before its' items:
+
+```javascript
+var BufferCodec = require("buffercodec");
+
+var length = 5;
+var buffer = BufferCodec().uint8(length);
+
+for (var i = 0; i < length; i++) {
+  buffer.uint8(i).uint16le(i*i);
+}
+
+var result = BufferCodec(buffer).parse([{
+  id: 'uint8',
+  value: 'uint16le'
+}]);
+
+/*
+result: [
+  {id: 1, value: 1},
+  {id: 2, value: 4},
+  {id: 3, value: 9},
+  {id: 4, value: 16},
+  {id: 5, value: 25}
+]
+*/
+```
+
 Methods
 ---------------
 
-* `buffer(buffer)`
-* `result()` - compiles the job list into a buffer and returns that buffer
+* `BufferCodec([buffer])` - constructor takes an optional buffer argument, which it may then use for parsing
+* `result()` - compiles the job list into a buffer and returns it
 * `parse(template[, transformFn])` - parse buffer with given template and apply transform function to the result
-* `string(data[, encoding])` - write a string with the given encoding (default is *utf16*)
 * `int8(data)` - signed 8 bit integer
 * `uint8(data)` - unsigned 8 bit integer
 * `int16le(data)` - signed, little endian 16 bit integer
@@ -71,3 +100,4 @@ Methods
 * `float32le(data)` - little endian 32 bit float
 * `float64be(data)` - big endian 64 bit float
 * `float64le(data)` - little endian 64 bit float
+* `string(data[, encoding])` - write a string with the given encoding (default is *utf16*)
