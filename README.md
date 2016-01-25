@@ -4,13 +4,17 @@ Buffer Codec
 BufferCodec allows you to efficiently and easily create buffers by chaining together calls
 to write basic data types to buffers and other way around. It uses 
 [Typed Arrays](https://developer.mozilla.org/en/docs/Web/JavaScript/Typed_arrays) which
-is available on both, browsers and Node environments.
+is makes this package available for usage to both, browsers and Node environment.
 
 [![Build Status](https://travis-ci.org/emmorts/buffercodec.svg?branch=master)](https://travis-ci.org/emmorts/buffercodec)
 
 Installation
 ------------
-Install this package by running `npm install buffercodec`.
+You may install the package via:
+
+ - npm `npm install buffercodec`
+ - bower `bower install buffercodec`
+ - git `git clone https://github.com/emmorts/buffercodec`
 
 Usage
 -----
