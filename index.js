@@ -373,4 +373,8 @@ BufferCodec.prototype.parse = function (template, transform) {
   }
 }
 
-module.exports = BufferCodec;
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = BufferCodec;
+} else {
+  window.BufferCodec = BufferCodec;
+}

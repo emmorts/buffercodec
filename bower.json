@@ -1,0 +1,25 @@
+{
+  "name": "buffercodec",
+  "description": "Buffer codec able to encode or decode primary data types.",
+  "main": "index.js",
+  "authors": [
+    "Tomas Stropus"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "encode",
+    "decode",
+    "buffer",
+    "binary",
+    "typed array"
+  ],
+  "homepage": "https://github.com/emmorts/buffercodec",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

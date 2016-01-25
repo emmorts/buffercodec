@@ -1,6 +1,6 @@
 {
   "name": "buffercodec",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Buffer codec able to encode or decode primary data types.",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,9 @@
   "keywords": [
     "encode",
     "decode",
-    "buffer"
+    "buffer",
+    "binary",
+    "typed array"
   ],
   "author": "Tomas Stropus",
   "license": "MIT",
