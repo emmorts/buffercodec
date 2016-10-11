@@ -373,6 +373,18 @@ BufferCodec.prototype.parse = function (template, transform) {
   }
 }
 
+BufferCodec.Schema = function (schema) {
+  this.schema = schema;
+}
+
+BufferCodec.Schema.prototype.encode = function (object) {
+  var codec = new BufferCodec();
+  
+  for (var propertyName in this.schema) {
+    // codec[]
+  }
+}
+
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = BufferCodec;
 } else {

@@ -93,6 +93,57 @@ describe('#encode', function () {
     expect(areEqual).to.be.true;
   });
 
+  it('should use schema for buffer encoding', function () {
+    var schema = new BufferCodec.Schema({
+      id: { type: 'string', length: 32 },
+      ownerId: { type: 'string', length: 32},
+      name: 'string',
+      health: 'uint16le',
+      x: 'float32le',
+      y: 'float32le',
+      flag: 'uint8'
+    }, function (object) {
+      return {
+        id: object.id,
+        ownerId: object.ownerId,
+        name: object.name,
+        health: object.health,
+        pos: {
+          x: object.x,
+          y: object.y
+        },
+        flag: object.flag
+      };
+    });
+
+    var player = {
+      id: '32165478-QWERTYUI-98765412-ASDFGHJK',
+      ownerId: 'ASDFGHJK-98765412-QWERTYUI-32165478',
+      name: 'Maria Magdalena',
+      health: 50,
+      x: 400.5,
+      y: 200.1
+    };
+
+    var buffer = schema.encode(player);
+
+    var expectedBuffer = new BufferCodec()
+      .uint8(player.id.length)
+      .string(player.id)
+      .uint8(player.ownerId.length)
+      .string(player.ownerId)
+      .uint8(player.name.length)
+      .string(player.name)
+      .uint16le(player.health)
+      .float32le(player.x)
+      .float32le(player.y)
+      .result();
+
+    var areEqual = areBuffersEqual(buffer, expectedBuffer);
+
+    expect(areEqual).to.be.true;
+  });
+
 });
 
 function areBuffersEqual(bufferA, bufferB) {
