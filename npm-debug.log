@@ -1,0 +1,110 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Users\\Tomas\\AppData\\Roaming\\npm\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'publish' ]
+2 info using npm@3.10.6
+3 info using node@v4.4.7
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   escapedName: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: 'C:\\git\\buffercodec',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory C:\Users\Tomas\AppData\Roaming\npm-cache\buffercodec\1.0.5\package.tgz not in flight; packing
+9 verbose correctMkdir C:\Users\Tomas\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+10 info lifecycle buffercodec@1.0.5~prepublish: buffercodec@1.0.5
+11 silly lifecycle buffercodec@1.0.5~prepublish: no script for prepublish, continuing
+12 verbose tar pack [ 'C:\\Users\\Tomas\\AppData\\Roaming\\npm-cache\\buffercodec\\1.0.5\\package.tgz',
+12 verbose tar pack   'C:\\git\\buffercodec' ]
+13 verbose tarball C:\Users\Tomas\AppData\Roaming\npm-cache\buffercodec\1.0.5\package.tgz
+14 verbose folder C:\git\buffercodec
+15 verbose addLocalTarball adding from inside cache C:\Users\Tomas\AppData\Roaming\npm-cache\buffercodec\1.0.5\package.tgz
+16 verbose correctMkdir C:\Users\Tomas\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+17 silly cache afterAdd buffercodec@1.0.5
+18 verbose afterAdd C:\Users\Tomas\AppData\Roaming\npm-cache\buffercodec\1.0.5\package\package.json not in flight; writing
+19 verbose correctMkdir C:\Users\Tomas\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+20 verbose afterAdd C:\Users\Tomas\AppData\Roaming\npm-cache\buffercodec\1.0.5\package\package.json written
+21 silly publish { name: 'buffercodec',
+21 silly publish   version: '1.0.5',
+21 silly publish   description: 'Buffer codec able to encode or decode primary data types.',
+21 silly publish   main: 'index.js',
+21 silly publish   scripts: { test: 'mocha' },
+21 silly publish   repository:
+21 silly publish    { type: 'git',
+21 silly publish      url: 'git+https://github.com/emmorts/buffercodec.git' },
+21 silly publish   keywords: [ 'encode', 'decode', 'buffer', 'binary', 'typed array' ],
+21 silly publish   author: { name: 'Tomas Stropus' },
+21 silly publish   license: 'MIT',
+21 silly publish   bugs: { url: 'https://github.com/emmorts/buffercodec/issues' },
+21 silly publish   homepage: 'https://github.com/emmorts/buffercodec#readme',
+21 silly publish   devDependencies: { 'buffer-equal': '^1.0.0', chai: '^3.4.1' },
+21 silly publish   readme: 'Buffer Codec\r\n===========\r\n\r\nBufferCodec allows you to efficiently and easily create buffers by chaining together calls\r\nto write basic data types to buffers and other way around. It uses \r\n[Typed Arrays](https://developer.mozilla.org/en/docs/Web/JavaScript/Typed_arrays) which\r\nis makes this package available for usage to both, browsers and Node environment.\r\n\r\n[![Build Status](https://travis-ci.org/emmorts/buffercodec.svg?branch=master)](https://travis-ci.org/emmorts/buffercodec)\r\n\r\nInstallation\r\n------------\r\nYou may install the package via:\r\n\r\n - npm `npm install buffercodec`\r\n - bower `bower install buffercodec`\r\n - git `git clone https://github.com/emmorts/buffercodec`\r\n\r\nUsage\r\n-----\r\nEncoding to buffer is as simple as this:\r\n\r\n```javascript\r\nvar BufferCodec = require("buffercodec");\r\n\r\nvar buffer = BufferCodec()\r\n  .uint8(0x1)\r\n  .string(\'hello world\')\r\n  .uint16le(Math.pow(2, 10))\r\n  .uint16le(Math.pow(2, 8))\r\n  .float32le(Math.PI)\r\n  .result();\r\n```\r\n\r\nDecoding above buffer to a single object:\r\n\r\n```javascript\r\nvar BufferCodec = require("buffercodec");\r\n\r\nvar object = BufferCodec(buffer).parse({\r\n  opcode: \'uint8\',\r\n  name: { type: \'string\', length: \'hello world\'.length },\r\n  posX: \'uint16le\',\r\n  posY: \'uint16le\',\r\n  pi: \'float32le\'\r\n});\r\n\r\n/*\r\nobject: {\r\n  opcode: 0x1,\r\n  name: \'hello world\',\r\n  posX: 1024,\r\n  posY: 256,\r\n  pi: 3.1415927410125732\r\n}\r\n*/\r\n```\r\n\r\nArrays are also supported, by providing the length of an array before its\' items:\r\n\r\n```javascript\r\nvar BufferCodec = require("buffercodec");\r\n\r\nvar length = 5;\r\nvar buffer = BufferCodec().uint8(length);\r\n\r\nfor (var i = 0; i < length; i++) {\r\n  buffer.uint8(i).uint16le(i*i);\r\n}\r\n\r\nvar result = BufferCodec(buffer).parse([{\r\n  id: \'uint8\',\r\n  value: \'uint16le\'\r\n}]);\r\n\r\n/*\r\nresult: [\r\n  {id: 1, value: 1},\r\n  {id: 2, value: 4},\r\n  {id: 3, value: 9},\r\n  {id: 4, value: 16},\r\n  {id: 5, value: 25}\r\n]\r\n*/\r\n```\r\n\r\nMethods\r\n---------------\r\n\r\n* `BufferCodec([buffer])` - constructor takes an optional buffer argument, which it may then use for parsing\r\n* `result()` - compiles the job list into a buffer and returns it\r\n* `parse(template[, transformFn])` - parse buffer with given template and apply transform function to the result\r\n* `int8(data)` - signed 8 bit integer\r\n* `uint8(data)` - unsigned 8 bit integer\r\n* `int16le(data)` - signed, little endian 16 bit integer\r\n* `int16be(data)` - signed, big endian 16 bit integer\r\n* `uint16le(data)` - unsigned, little endian 16 bit integer\r\n* `uint16be(data)` - unsigned, big endian 16 bit integer\r\n* `int32le(data)` - signed, little endian 32 bit integer\r\n* `int32be(data)` - signed, big endian 32 bit integer\r\n* `uint32le(data)` - unsigned, little endian 32 bit integer\r\n* `uint32be(data)` - unsigned, big endian 32 bit integer\r\n* `float32be(data)` - big endian 32 bit float\r\n* `float32le(data)` - little endian 32 bit float\r\n* `float64be(data)` - big endian 64 bit float\r\n* `float64le(data)` - little endian 64 bit float\r\n* `string(data[, encoding])` - write a string with the given encoding (default is *utf16*)\r\n',
+21 silly publish   readmeFilename: 'README.md',
+21 silly publish   gitHead: '37b2f04484a1585bc21f2183ac5e0d5c6a53e9b2',
+21 silly publish   _id: 'buffercodec@1.0.5',
+21 silly publish   _shasum: 'ba2997e8b7fc9578023fb198d322e0d1fe3632f0',
+21 silly publish   _from: '.' }
+22 verbose getPublishConfig undefined
+23 silly mapToRegistry name buffercodec
+24 silly mapToRegistry using default registry
+25 silly mapToRegistry registry https://registry.npmjs.org/
+26 silly mapToRegistry data Result {
+26 silly mapToRegistry   raw: 'buffercodec',
+26 silly mapToRegistry   scope: null,
+26 silly mapToRegistry   escapedName: 'buffercodec',
+26 silly mapToRegistry   name: 'buffercodec',
+26 silly mapToRegistry   rawSpec: '',
+26 silly mapToRegistry   spec: 'latest',
+26 silly mapToRegistry   type: 'tag' }
+27 silly mapToRegistry uri https://registry.npmjs.org/buffercodec
+28 verbose publish registryBase https://registry.npmjs.org/
+29 silly publish uploading C:\Users\Tomas\AppData\Roaming\npm-cache\buffercodec\1.0.5\package.tgz
+30 verbose request uri https://registry.npmjs.org/buffercodec
+31 verbose request sending authorization for write operation
+32 info attempt registry request try #1 at 9:27:29 PM
+33 verbose request using bearer token for auth
+34 verbose request id 5e36f6c7116bc878
+35 http request PUT https://registry.npmjs.org/buffercodec
+36 http 403 https://registry.npmjs.org/buffercodec
+37 verbose headers { 'content-type': 'application/json',
+37 verbose headers   'cache-control': 'max-age=300',
+37 verbose headers   'content-length': '95',
+37 verbose headers   'accept-ranges': 'bytes',
+37 verbose headers   date: 'Wed, 12 Oct 2016 19:27:31 GMT',
+37 verbose headers   via: '1.1 varnish',
+37 verbose headers   connection: 'keep-alive',
+37 verbose headers   'x-served-by': 'cache-fra1249-FRA',
+37 verbose headers   'x-cache': 'MISS',
+37 verbose headers   'x-cache-hits': '0',
+37 verbose headers   'x-timer': 'S1476300449.827324,VS0,VE1418',
+37 verbose headers   vary: 'Accept-Encoding' }
+38 verbose request invalidating C:\Users\Tomas\AppData\Roaming\npm-cache\registry.npmjs.org\buffercodec on PUT
+39 error publish Failed PUT 403
+40 verbose stack Error: "You cannot publish over the previously published version 1.0.5." : buffercodec
+40 verbose stack     at makeError (C:\Users\Tomas\AppData\Roaming\npm\node_modules\npm\node_modules\npm-registry-client\lib\request.js:264:12)
+40 verbose stack     at CachingRegistryClient.<anonymous> (C:\Users\Tomas\AppData\Roaming\npm\node_modules\npm\node_modules\npm-registry-client\lib\request.js:252:14)
+40 verbose stack     at Request._callback (C:\Users\Tomas\AppData\Roaming\npm\node_modules\npm\node_modules\npm-registry-client\lib\request.js:172:14)
+40 verbose stack     at Request.self.callback (C:\Users\Tomas\AppData\Roaming\npm\node_modules\npm\node_modules\request\request.js:200:22)
+40 verbose stack     at emitTwo (events.js:87:13)
+40 verbose stack     at Request.emit (events.js:172:7)
+40 verbose stack     at Request.<anonymous> (C:\Users\Tomas\AppData\Roaming\npm\node_modules\npm\node_modules\request\request.js:1067:10)
+40 verbose stack     at emitOne (events.js:82:20)
+40 verbose stack     at Request.emit (events.js:169:7)
+40 verbose stack     at IncomingMessage.<anonymous> (C:\Users\Tomas\AppData\Roaming\npm\node_modules\npm\node_modules\request\request.js:988:12)
+41 verbose statusCode 403
+42 verbose pkgid buffercodec
+43 verbose cwd C:\git\buffercodec
+44 error Windows_NT 10.0.14393
+45 error argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Users\\Tomas\\AppData\\Roaming\\npm\\node_modules\\npm\\bin\\npm-cli.js" "publish"
+46 error node v4.4.7
+47 error npm  v3.10.6
+48 error code E403
+49 error "You cannot publish over the previously published version 1.0.5." : buffercodec
+50 error If you need help, you may report this error at:
+50 error     <https://github.com/npm/npm/issues>
+51 verbose exit [ 1, true ]
