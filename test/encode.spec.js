@@ -93,15 +93,15 @@ describe('#encode', function () {
     expect(areEqual).to.be.true;
   });
 
-  it('should use schema for buffer encoding', function () {
+  it('should encode a complex object using schema', function () {
     var schema = new BufferCodec.Schema({
       id: { type: 'string', length: 32 },
       ownerId: { type: 'string', length: 32},
       name: 'string',
+      targets: [{ id: 'uint8' }],
       health: 'uint16le',
       x: 'float32le',
-      y: 'float32le',
-      flag: 'uint8'
+      y: 'float32le'
     }, function (object) {
       return {
         id: object.id,
@@ -111,15 +111,15 @@ describe('#encode', function () {
         pos: {
           x: object.x,
           y: object.y
-        },
-        flag: object.flag
+        }
       };
     });
 
     var player = {
-      id: '32165478-QWERTYUI-98765412-ASDFGHJK',
-      ownerId: 'ASDFGHJK-98765412-QWERTYUI-32165478',
+      id: '32165478-QWERTYUI-98765412-ASDFG',
+      ownerId: 'ASDFGHJK-98765412-QWERTYUI-32165',
       name: 'Maria Magdalena',
+      targets: [{ id: 1 }, { id: 2 }, { id: 3 }],
       health: 50,
       x: 400.5,
       y: 200.1
@@ -134,11 +134,15 @@ describe('#encode', function () {
       .string(player.ownerId)
       .uint8(player.name.length)
       .string(player.name)
+      .uint8(player.targets.length)
+      .uint8(player.targets[0].id)
+      .uint8(player.targets[1].id)
+      .uint8(player.targets[2].id)
       .uint16le(player.health)
       .float32le(player.x)
       .float32le(player.y)
       .result();
-
+    
     var areEqual = areBuffersEqual(buffer, expectedBuffer);
 
     expect(areEqual).to.be.true;

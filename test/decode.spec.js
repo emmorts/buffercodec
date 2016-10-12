@@ -4,22 +4,6 @@ var bufferEqual = require('buffer-equal');
 
 describe('#decode', function () {
 
-  it('should decode a string', function () {
-    var now = new Date().toString();
-
-    var buffer = new ArrayBuffer(now.length * 2);
-    var bufferView = new Uint16Array(buffer);
-    for (var i = 0, strLen = now.length; i < strLen; i++) {
-      bufferView[i] = now.charCodeAt(i);
-    }
-    
-    var result = BufferCodec(buffer).parse({
-      date: { type: 'string', length: now.length }
-    });
-    
-    expect(result.date).to.equal(now);
-  });
-
   it('should decode a complex object', function () {
     var buffer = new ArrayBuffer(7);
     var bufferView = new DataView(buffer);
@@ -88,6 +72,51 @@ describe('#decode', function () {
     
     expect(result).to.be.ok;
     expect(result).to.deep.equal(objects);
+  });
+
+  it('should decode a complex object and transform it using schema', function () {
+    var player = {
+      id: '32165478-QWERTYUI-98765412-ASDFG',
+      ownerId: 'ASDFGHJK-98765412-QWERTYUI-32165',
+      targets: [{ id: 1 }, { id: 2 }, { id: 3 }],
+      health: 50,
+      x: 400,
+      y: 200
+    };
+
+    var schema = new BufferCodec.Schema({
+      id: 'string',
+      ownerId: 'string',
+      targets: [{ id: 'uint8' }],
+      health: 'uint16le',
+      x: 'float32le',
+      y: 'float32le'
+    }, function (object) {
+      return {
+        id: object.id,
+        ownerId: object.ownerId,
+        health: object.health,
+        pos: {
+          x: object.x,
+          y: object.y
+        }
+      };
+    });
+
+    var buffer = schema.encode(player);
+
+    var decodedObject = schema.decode(buffer);
+
+    expect(decodedObject).to.be.ok;
+    expect(decodedObject).to.deep.equal({
+      id: player.id,
+      ownerId: player.ownerId,
+      health: player.health,
+      pos: {
+        x: player.x,
+        y: player.y
+      }
+    });
   });
 
 });

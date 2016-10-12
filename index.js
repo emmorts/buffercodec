@@ -336,12 +336,12 @@ BufferCodec.prototype.parse = function (template, transform) {
         this.offset += 8;
         break;
       case 'string':
-        if (typeof element.length === 'undefined') {
-          element.length = data.getUint8(this.offset++);
-        } else if (!element.length) {
-          templateResult = '';
-          break;
-        }
+        element.length = data.getUint8(this.offset++);
+        // if (typeof element.length === 'undefined') {
+        // } else if (!element.length) {
+        //   templateResult = '';
+        //   break;
+        // }
         if (!element.encoding || element.encoding === 'utf16') {
           var utf16 = new ArrayBuffer(element.length * 2);
           var utf16view = new Uint16Array(utf16);
@@ -373,16 +373,49 @@ BufferCodec.prototype.parse = function (template, transform) {
   }
 }
 
-BufferCodec.Schema = function (schema) {
+BufferCodec.Schema = function (schema, transform) {
   this.schema = schema;
+  this.transform = transform;
 }
 
 BufferCodec.Schema.prototype.encode = function (object) {
   var codec = new BufferCodec();
-  
-  for (var propertyName in this.schema) {
-    // codec[]
+
+  function encode(value, schema) {
+    for (var propertyName in schema) {
+      var method = null;
+      var encoding = null;
+      if (schema[propertyName] instanceof Array) {
+        codec.uint8(object[propertyName].length);
+        object[propertyName].forEach(function (item) {
+          encode(item, schema[propertyName][0]);
+        });
+      } else if (schema[propertyName] instanceof Object) {
+        method = schema[propertyName].type;
+        if (method === 'string') {
+          encoding = schema[propertyName].encoding;
+          codec.uint8(schema[propertyName].length || object[propertyName].length);
+        }
+      } else {
+        method = schema[propertyName];
+        if (method === 'string') {
+          codec.uint8(value[propertyName].length);
+        }
+      }
+      if (method) {
+        codec[method](value[propertyName], encoding);
+      }
+    }
   }
+
+  encode(object, this.schema);
+
+  return codec.result();
+}
+
+BufferCodec.Schema.prototype.decode = function (buffer) {
+  var codec = new BufferCodec(buffer);
+  return codec.parse(this.schema, this.transform);
 }
 
 if (typeof module !== 'undefined' && module.exports) {
