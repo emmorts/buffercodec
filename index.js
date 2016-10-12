@@ -23,7 +23,14 @@ function BufferCodec(buffer) {
       console.warn("Received malformed data");
     }
   }
-}
+};
+
+BufferCodec.prototype.getBuffer = function (trimOffset) {
+  if (trimOffset) {
+    return this.buffer.slice(this.offset);
+  }
+  return this.buffer;
+};
 
 BufferCodec.prototype.result = function () {
   this.offset = 0;
@@ -337,11 +344,6 @@ BufferCodec.prototype.parse = function (template, transform) {
         break;
       case 'string':
         element.length = data.getUint8(this.offset++);
-        // if (typeof element.length === 'undefined') {
-        // } else if (!element.length) {
-        //   templateResult = '';
-        //   break;
-        // }
         if (!element.encoding || element.encoding === 'utf16') {
           var utf16 = new ArrayBuffer(element.length * 2);
           var utf16view = new Uint16Array(utf16);

@@ -1,6 +1,6 @@
 {
   "name": "buffercodec",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Buffer codec able to encode or decode primary data types.",
   "main": "index.js",
   "scripts": {
