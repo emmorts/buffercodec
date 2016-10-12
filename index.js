@@ -380,8 +380,8 @@ BufferCodec.Schema = function (schema, transform) {
   this.transform = transform;
 }
 
-BufferCodec.Schema.prototype.encode = function (object) {
-  var codec = new BufferCodec();
+BufferCodec.Schema.prototype.encode = function (object, codec) {
+  var codec = codec || new BufferCodec();
 
   function encode(value, schema) {
     for (var propertyName in schema) {
