@@ -388,15 +388,20 @@ BufferCodec.Schema.prototype.encode = function (object, codec) {
       var method = null;
       var encoding = null;
       if (schema[propertyName] instanceof Array) {
-        codec.uint8(object[propertyName].length);
-        object[propertyName].forEach(function (item) {
-          encode(item, schema[propertyName][0]);
+        codec.uint8(value[propertyName].length);
+        value[propertyName].forEach(function (item) {
+          var innerSchema = schema[propertyName][0];
+          if (innerSchema instanceof Object) {
+            encode(item, schema[propertyName][0]);
+          } else {
+            codec[innerSchema](item, encoding);
+          }
         });
       } else if (schema[propertyName] instanceof Object) {
         method = schema[propertyName].type;
         if (method === 'string') {
           encoding = schema[propertyName].encoding;
-          codec.uint8(schema[propertyName].length || object[propertyName].length);
+          codec.uint8(schema[propertyName].length || value[propertyName].length);
         }
       } else {
         method = schema[propertyName];
@@ -410,7 +415,9 @@ BufferCodec.Schema.prototype.encode = function (object, codec) {
     }
   }
 
-  encode(object, this.schema);
+  if (object && this.schema) {
+    encode(object, this.schema);
+  }
 
   return codec.result();
 }

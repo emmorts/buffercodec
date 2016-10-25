@@ -93,6 +93,70 @@ describe('#encode', function () {
     expect(areEqual).to.be.true;
   });
 
+  it('should encode an array with plain types using schema', function () {
+    var schema = new BufferCodec.Schema({
+      outerArray: [{
+        innerArray: ['uint8']
+      }]
+    });
+
+    var object = {
+      outerArray: [{
+        innerArray: [1, 2]
+      }, {
+        innerArray: [3, 4]
+      }]
+    };
+
+    var buffer = schema.encode(object);
+
+    var expectedBuffer = new BufferCodec()
+      .uint8(object.outerArray.length)
+      .uint8(object.outerArray[0].innerArray.length)
+      .uint8(object.outerArray[0].innerArray[0])
+      .uint8(object.outerArray[0].innerArray[1])
+      .uint8(object.outerArray[1].innerArray.length)
+      .uint8(object.outerArray[1].innerArray[0])
+      .uint8(object.outerArray[1].innerArray[1])
+      .result();
+    
+    var areEqual = areBuffersEqual(buffer, expectedBuffer);
+
+    expect(areEqual).to.be.true;
+  });
+
+  it('should encode an array using schema', function () {
+    var schema = new BufferCodec.Schema({
+      outerArray: [{
+        innerArray: [{ value: 'uint8' }]
+      }]
+    });
+
+    var object = {
+      outerArray: [{
+        innerArray: [{ value: 1 }, { value: 2 }]
+      }, {
+        innerArray: [{ value: 3 }, { value: 4 }]
+      }]
+    };
+
+    var buffer = schema.encode(object);
+
+    var expectedBuffer = new BufferCodec()
+      .uint8(object.outerArray.length)
+      .uint8(object.outerArray[0].innerArray.length)
+      .uint8(object.outerArray[0].innerArray[0].value)
+      .uint8(object.outerArray[0].innerArray[1].value)
+      .uint8(object.outerArray[1].innerArray.length)
+      .uint8(object.outerArray[1].innerArray[0].value)
+      .uint8(object.outerArray[1].innerArray[1].value)
+      .result();
+    
+    var areEqual = areBuffersEqual(buffer, expectedBuffer);
+
+    expect(areEqual).to.be.true;
+  });
+
   it('should encode a complex object using schema', function () {
     var schema = new BufferCodec.Schema({
       id: { type: 'string', length: 32 },
