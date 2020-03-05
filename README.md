@@ -4,7 +4,7 @@ Buffer Codec
 BufferCodec allows you to efficiently and easily create buffers by chaining together calls
 to write basic data types to buffers and other way around. It uses 
 [Typed Arrays](https://developer.mozilla.org/en/docs/Web/JavaScript/Typed_arrays) which
-is makes this package available for usage to both, browsers and Node environment.
+makes this package readily available for both, browsers and Node environments.
 
 [![Build Status](https://travis-ci.org/emmorts/buffercodec.svg?branch=master)](https://travis-ci.org/emmorts/buffercodec)
 

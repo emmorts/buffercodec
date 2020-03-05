@@ -4,7 +4,8 @@
   "description": "Buffer codec able to encode or decode primary data types.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "ts-mocha ./test/*.spec.ts",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -24,7 +25,17 @@
   },
   "homepage": "https://github.com/emmorts/buffercodec#readme",
   "devDependencies": {
+    "@types/buffer-equal": "0.0.30",
+    "@types/chai": "^4.2.10",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.7.7",
     "buffer-equal": "^1.0.0",
-    "chai": "^3.4.1"
-  }
+    "chai": "^3.4.1",
+    "mocha": "^7.1.0",
+    "nyc": "^15.0.0",
+    "ts-mocha": "^6.0.0",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {}
 }
