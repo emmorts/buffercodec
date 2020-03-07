@@ -1,10 +1,10 @@
 language: node_js
 node_js:
-- '4.2.4'
-before_install: npm install -g mocha
+- '10.13.0'
+# before_install: npm install -g mocha
 before_script: npm install
 after_success: npm publish
-script: mocha
+script: npm test
 sudo: false
 env:
   global:

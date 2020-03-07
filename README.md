@@ -1,8 +1,8 @@
 Buffer Codec
 ===========
 
-BufferCodec allows you to efficiently and easily create buffers by chaining together calls
-to write basic data types to buffers and other way around. It uses 
+BufferCodec is a lightweight package that allows you to efficiently and easily translate between JSON and buffers
+by chaining together calls to write basic data types to buffers and other way around. It uses 
 [Typed Arrays](https://developer.mozilla.org/en/docs/Web/JavaScript/Typed_arrays) which
 makes this package readily available for both, browsers and Node environments.
 
@@ -21,29 +21,31 @@ Usage
 Encoding to buffer is as simple as this:
 
 ```javascript
-var BufferCodec = require("buffercodec");
+import { BufferCodec } from "buffercodec";
 
-var buffer = BufferCodec()
+const buffer = new BufferCodec()
   .uint8(0x1)
   .string('hello world')
-  .uint16le(Math.pow(2, 10))
-  .uint16le(Math.pow(2, 8))
-  .float32le(Math.PI)
+  .uint16(Math.pow(2, 10))
+  .uint16(Math.pow(2, 8))
+  .float32(Math.PI)
   .result();
 ```
 
 Decoding above buffer to a single object:
 
 ```javascript
-var BufferCodec = require("buffercodec");
+import { BufferCodec } from "buffercodec";
 
-var object = BufferCodec(buffer).parse({
-  opcode: 'uint8',
-  name: { type: 'string', length: 'hello world'.length },
-  posX: 'uint16le',
-  posY: 'uint16le',
-  pi: 'float32le'
-});
+const object = BufferCodec
+  .from(buffer)
+  .parse({
+    opcode: 'uint8',
+    name: 'string',
+    posX: 'uint16',
+    posY: 'uint16',
+    pi: 'float32'
+  });
 
 /*
 object: {
@@ -56,22 +58,24 @@ object: {
 */
 ```
 
-Arrays are also supported, by providing the length of an array before its' items:
+Top-level arrays are also supported, by providing the length of an array before its' items:
 
 ```javascript
-var BufferCodec = require("buffercodec");
+import { BufferCodec } from "buffercodec";
 
-var length = 5;
-var buffer = BufferCodec().uint8(length);
+const length = 5;
+const buffer = new BufferCodec().uint8(length);
 
-for (var i = 0; i < length; i++) {
-  buffer.uint8(i).uint16le(i*i);
+for (let i = 0; i < length; i++) {
+  buffer.uint8(i).uint16(i*i);
 }
 
-var result = BufferCodec(buffer).parse([{
-  id: 'uint8',
-  value: 'uint16le'
-}]);
+const result = BufferCodec
+  .from(buffer)
+  .parse([{
+    id: 'uint8',
+    value: 'uint16'
+  }]);
 
 /*
 result: [
@@ -87,21 +91,16 @@ result: [
 Methods
 ---------------
 
-* `BufferCodec([buffer])` - constructor takes an optional buffer argument, which it may then use for parsing
-* `result()` - compiles the job list into a buffer and returns it
-* `parse(template[, transformFn])` - parse buffer with given template and apply transform function to the result
-* `int8(data)` - signed 8 bit integer
-* `uint8(data)` - unsigned 8 bit integer
-* `int16le(data)` - signed, little endian 16 bit integer
-* `int16be(data)` - signed, big endian 16 bit integer
-* `uint16le(data)` - unsigned, little endian 16 bit integer
-* `uint16be(data)` - unsigned, big endian 16 bit integer
-* `int32le(data)` - signed, little endian 32 bit integer
-* `int32be(data)` - signed, big endian 32 bit integer
-* `uint32le(data)` - unsigned, little endian 32 bit integer
-* `uint32be(data)` - unsigned, big endian 32 bit integer
-* `float32be(data)` - big endian 32 bit float
-* `float32le(data)` - little endian 32 bit float
-* `float64be(data)` - big endian 64 bit float
-* `float64le(data)` - little endian 64 bit float
-* `string(data[, encoding])` - write a string with the given encoding (default is *utf16*)
+* `BufferCodec([options = { encoding: boolean, buffer: Buffer | ArrayBuffer }])` - constructor takes an optional options argument
+* `from(buffer: Buffer | ArrayBuffer)` - instantiates a new instance using provided Buffer
+* `result()` - returns the resulting buffer
+* `parse(template)` - parse buffer with given template
+* `int8(value: number)` - signed 8 bit integer
+* `uint8(value: number)` - unsigned 8 bit integer
+* `int16(value: number [, littleEndian: boolean = false])` - signed 16 bit integer (big endian by default)
+* `uint16(value: number [, littleEndian: boolean = false])` - unsigned 16 bit integer (big endian by default)
+* `int32le(value: number [, littleEndian: boolean = false])` - signed 32 bit integer (big endian by default)
+* `uint32le(value: number [, littleEndian: boolean = false])` - unsigned 32 bit integer (big endian by default)
+* `float32be(value: number [, littleEndian: boolean = false])` - 32-bit float (big endian by default)
+* `float64be(value: number [, littleEndian: boolean = false])` - 64-bit float (big endian by default)
+* `string(value: string [, encoding: 'utf8' | 'utf16'])` - write a string with the given encoding (default is *utf16*)
