@@ -2,9 +2,11 @@
   "name": "buffercodec",
   "version": "2.0.0",
   "description": "Buffer codec able to encode or decode primary data types.",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.js",
   "scripts": {
     "test": "ts-mocha ./test/*.spec.ts",
+    "ci-test": "mocha ./dist/test/*.spec.js",
     "build": "tsc"
   },
   "repository": {
