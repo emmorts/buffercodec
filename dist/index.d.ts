@@ -1,3 +1,3 @@
-import { BufferCodec } from './buffercodec';
-import { BufferSchema } from './bufferschema';
+import { BufferCodec } from './BufferCodec';
+import { BufferSchema } from './BufferSchema';
 export { BufferCodec, BufferSchema };

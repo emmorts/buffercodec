@@ -30,18 +30,18 @@ describe('#decode', () => {
       .parse({
         int8Test: 'int8',
         uint8Test: 'uint8',
-        int16leTest: 'int16le',
-        int16beTest: 'int16be',
-        uint16leTest: 'uint16le',
-        uint16beTest: 'uint16be',
-        int32leTest: 'int32le',
-        int32beTest: 'int32be',
-        uint32leTest: 'uint32le',
-        uint32beTest: 'uint32be',
-        float32leTest: 'float32le',
-        float32beTest: 'float32be',
-        float64leTest: 'float64le',
-        float64beTest: 'float64be'
+        int16leTest: 'int16|littleEndian',
+        int16beTest: 'int16',
+        uint16leTest: 'uint16|littleEndian',
+        uint16beTest: 'uint16',
+        int32leTest: 'int32|littleEndian',
+        int32beTest: 'int32',
+        uint32leTest: 'uint32|littleEndian',
+        uint32beTest: 'uint32',
+        float32leTest: 'float32|littleEndian',
+        float32beTest: 'float32',
+        float64leTest: 'float64|littleEndian',
+        float64beTest: 'float64'
       });
 
     expect(obj).to.be.ok;
@@ -118,9 +118,9 @@ describe('#decode', () => {
     
     const obj = BufferCodec.from(buffer).parse({
       test1: 'uint8',
-      test2: 'uint16le',
+      test2: 'uint16|littleEndian',
       inner: {
-        test3: 'int32be',
+        test3: 'int32',
       }
     });
     
@@ -129,29 +129,6 @@ describe('#decode', () => {
     expect(obj.test2).to.equal(0xFFFF);
     expect(obj.inner).to.be.ok;
     expect(obj.inner.test3).to.equal(0x7FFFFFFF);
-  });
-
-  it('should decode a complex object and transform it', () => {
-    const buffer = new ArrayBuffer(7);
-    const bufferView = new DataView(buffer);
-    bufferView.setUint8(0, 0x01);
-    bufferView.setUint16(1, 0xFFFF, true);
-    bufferView.setInt32(3, 0x7FFFFFFF, false);
-    
-    const obj = BufferCodec.from(buffer).parse({
-      test1: 'uint8',
-      test2: 'uint16le',
-      test3: 'int32be',
-    }, result => [
-      result.test1,
-      result.test2,
-      result.test3
-    ]);
-    
-    expect(obj).to.be.ok;
-    expect(obj[0]).to.equal(0x01);
-    expect(obj[1]).to.equal(0xFFFF);
-    expect(obj[2]).to.equal(0x7FFFFFFF);
   });
   
   it('should decode an array', () => {
@@ -171,73 +148,11 @@ describe('#decode', () => {
     
     const result = BufferCodec.from(buffer).parse([{
       id: 'uint8',
-      value: 'uint16le'
+      value: 'uint16|littleEndian'
     }]);
     
     expect(result).to.be.ok;
     expect(result).to.deep.equal(objects);
-  });
-
-  it('should decode a string using schema', () => {
-    const target = {
-      foo: 'bar',
-      bar: 'baz'
-    };
-
-    const schema = new BufferSchema({
-      foo: 'string',
-      bar: 'string'
-    });
-
-    const buffer = schema.encode(target);
-    const decodedObject = schema.decode(buffer);
-
-    expect(decodedObject).to.deep.equal(target);
-  });
-
-  it('should decode a complex object and transform it using schema', () => {
-    const player = {
-      id: '32165478-QWERTYUI-98765412-ASDFG',
-      ownerId: 'ASDFGHJK-98765412-QWERTYUI-32165',
-      targets: [{ id: 1 }, { id: 2 }, { id: 3 }],
-      health: 50,
-      x: 400,
-      y: 200
-    };
-
-    const schema = new BufferSchema({
-      id: 'string',
-      ownerId: 'string',
-      targets: [{ id: 'uint8' }],
-      health: 'uint16le',
-      x: 'float32le',
-      y: 'float32le'
-    }, {
-      transform: object => ({
-        id: object.id,
-        ownerId: object.ownerId,
-        health: object.health,
-        pos: {
-          x: object.x,
-          y: object.y
-        }
-      })
-    });
-
-    const buffer = schema.encode(player);
-
-    const decodedObject = schema.decode(buffer);
-
-    expect(decodedObject).to.be.ok;
-    expect(decodedObject).to.deep.equal({
-      id: player.id,
-      ownerId: player.ownerId,
-      health: player.health,
-      pos: {
-        x: player.x,
-        y: player.y
-      }
-    });
   });
 
 });

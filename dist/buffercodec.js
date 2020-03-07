@@ -12,13 +12,14 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-var _buffer, _encoding, _offset, _jobs;
+var _buffer, _dataView, _encoding, _offset, _jobs;
 Object.defineProperty(exports, "__esModule", { value: true });
 class BufferCodec {
     constructor(options = {
         encoding: 'utf16'
     }) {
         _buffer.set(this, void 0);
+        _dataView.set(this, void 0);
         _encoding.set(this, 'utf16');
         _offset.set(this, 0);
         _jobs.set(this, []);
@@ -27,6 +28,7 @@ class BufferCodec {
         }
         if (options.buffer) {
             __classPrivateFieldSet(this, _buffer, options.buffer);
+            __classPrivateFieldSet(this, _dataView, new DataView(__classPrivateFieldGet(this, _buffer)));
         }
     }
     get offset() {
@@ -37,7 +39,7 @@ class BufferCodec {
     }
     setEncoding(encoding) {
         if (encoding !== 'utf16' && encoding !== 'utf8') {
-            throw new Error(`Unsupported encoding. Only UTF-8 and UTF-16 are currently supported.`);
+            throw new Error(`Unsupported encoding '${encoding}'. Only UTF-8 and UTF-16 are currently supported.`);
         }
         __classPrivateFieldSet(this, _encoding, encoding);
         return this;
@@ -57,7 +59,7 @@ class BufferCodec {
             }
         }
         else {
-            throw new Error("Received malformed data");
+            throw new Error("Received malformed data.");
         }
     }
     getBuffer(trimOffset = false) {
@@ -112,11 +114,60 @@ class BufferCodec {
         __classPrivateFieldSet(this, _jobs, []);
         return dataView.buffer;
     }
+    decode(options) {
+        const dataView = __classPrivateFieldGet(this, _dataView);
+        let itemValue;
+        switch (options.type) {
+            case 'int8':
+                itemValue = dataView.getInt8(__classPrivateFieldGet(this, _offset));
+                __classPrivateFieldSet(this, _offset, __classPrivateFieldGet(this, _offset) + 1);
+                break;
+            case 'uint8':
+                itemValue = dataView.getUint8(__classPrivateFieldGet(this, _offset));
+                __classPrivateFieldSet(this, _offset, __classPrivateFieldGet(this, _offset) + 1);
+                break;
+            case 'int16':
+                itemValue = dataView.getInt16(__classPrivateFieldGet(this, _offset), options.littleEndian);
+                __classPrivateFieldSet(this, _offset, __classPrivateFieldGet(this, _offset) + 2);
+                break;
+            case 'uint16':
+                itemValue = dataView.getUint16(__classPrivateFieldGet(this, _offset), options.littleEndian);
+                __classPrivateFieldSet(this, _offset, __classPrivateFieldGet(this, _offset) + 2);
+                break;
+            case 'int32':
+                itemValue = dataView.getInt32(__classPrivateFieldGet(this, _offset), options.littleEndian);
+                __classPrivateFieldSet(this, _offset, __classPrivateFieldGet(this, _offset) + 4);
+                break;
+            case 'uint32':
+                itemValue = dataView.getUint32(__classPrivateFieldGet(this, _offset), options.littleEndian);
+                __classPrivateFieldSet(this, _offset, __classPrivateFieldGet(this, _offset) + 4);
+                break;
+            case 'float32':
+                itemValue = dataView.getFloat32(__classPrivateFieldGet(this, _offset), options.littleEndian);
+                __classPrivateFieldSet(this, _offset, __classPrivateFieldGet(this, _offset) + 4);
+                break;
+            case 'float64':
+                itemValue = dataView.getFloat64(__classPrivateFieldGet(this, _offset), options.littleEndian);
+                __classPrivateFieldSet(this, _offset, __classPrivateFieldGet(this, _offset) + 8);
+                break;
+            case 'string':
+                const [decodedString, length] = this.decodeString(dataView);
+                itemValue = decodedString;
+                __classPrivateFieldSet(this, _offset, __classPrivateFieldGet(this, _offset) + length);
+                break;
+            default:
+                throw new Error(`Type '${options.type}' is not supported.`);
+        }
+        return itemValue;
+    }
     parse(template, transform) {
         if (__classPrivateFieldGet(this, _buffer) && template) {
-            const dataView = new DataView(__classPrivateFieldGet(this, _buffer));
+            const dataView = __classPrivateFieldGet(this, _dataView);
             let result = {};
-            if (template instanceof Array) {
+            if (typeof (template) === 'string') {
+                result = this.parseValue(dataView, template);
+            }
+            else if (template instanceof Array) {
                 const arrayTemplate = template;
                 result = this.parseArray(dataView, arrayTemplate[0]);
             }
@@ -326,7 +377,7 @@ class BufferCodec {
         if (__classPrivateFieldGet(this, _encoding) === 'utf8') {
             const utf8 = new ArrayBuffer(contentLength);
             const utf8view = new Uint8Array(utf8);
-            for (let i = 0; i < contentLength; i++, currentOffset += 2) {
+            for (let i = 0; i < contentLength; i++, currentOffset += 1) {
                 utf8view[i] = dataView.getUint8(currentOffset);
             }
             result = String.fromCharCode.apply(null, Array.from(utf8view));
@@ -360,4 +411,4 @@ class BufferCodec {
     }
 }
 exports.BufferCodec = BufferCodec;
-_buffer = new WeakMap(), _encoding = new WeakMap(), _offset = new WeakMap(), _jobs = new WeakMap();
+_buffer = new WeakMap(), _dataView = new WeakMap(), _encoding = new WeakMap(), _offset = new WeakMap(), _jobs = new WeakMap();

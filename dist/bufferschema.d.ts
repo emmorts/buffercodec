@@ -1,14 +1,9 @@
-import { BufferCodec, BufferTemplate, BufferStringEncoding } from './buffercodec';
-export interface BufferSchemaOptions {
-    encoding?: BufferStringEncoding;
-    transform?: (result: any) => any;
-}
+import { BufferCodec, BufferTemplate } from './BufferCodec';
 export declare class BufferSchema {
     #private;
-    constructor(template: BufferTemplate, options?: BufferSchemaOptions);
-    encode(object: any, codec?: BufferCodec): ArrayBuffer;
+    constructor(template: BufferTemplate);
+    encode(value: any, bufferCodec?: BufferCodec): ArrayBuffer;
     decode(buffer: ArrayBuffer): any;
-    private encodeObject;
-    private encodeArray;
+    private executeEncodeJob;
     private encodeValue;
 }

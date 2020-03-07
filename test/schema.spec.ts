@@ -1,10 +1,14 @@
 import { BufferSchema, BufferCodec } from '../lib';
-import { expect } from 'chai';
+import * as chai from 'chai';
 import { areBuffersEqual } from './utils';
+
+const expect = chai.expect;
+
+chai.use(require('chai-roughly'));
 
 describe('#schema', () => {
 
-  it('should encode an object', () => {
+  it('should encode an int8', () => {
     const expectedBuffer = new ArrayBuffer(1);
     const expectedBufferDataView = new DataView(expectedBuffer);
     expectedBufferDataView.setInt8(0, 0x7F);
@@ -22,7 +26,7 @@ describe('#schema', () => {
     expect(areEqual).to.be.true;
   });
 
-  it('should decode an object', () => {
+  it('should decode an int8', () => {
     const buffer = new ArrayBuffer(1);
     const bufferView = new DataView(buffer);
     bufferView.setInt8(0, 0x7F);
@@ -38,7 +42,75 @@ describe('#schema', () => {
     });
   });
 
-  it('should encode an array', () => {
+  it('should encode an int16 using big endian', () => {
+    const expectedBuffer = new ArrayBuffer(2);
+    const expectedBufferDataView = new DataView(expectedBuffer);
+    expectedBufferDataView.setInt16(0, 0x7F);
+
+    const schema = new BufferSchema({
+      foo: 'int16'
+    });
+
+    const schemaBuffer = schema.encode({
+      foo: 0x7F
+    });
+
+    const areEqual = areBuffersEqual(schemaBuffer, expectedBuffer);
+
+    expect(areEqual).to.be.true;
+  });
+
+  it('should encode an int16 using little endian', () => {
+    const expectedBuffer = new ArrayBuffer(2);
+    const expectedBufferDataView = new DataView(expectedBuffer);
+    expectedBufferDataView.setInt16(0, 0x7F, true);
+
+    const schema = new BufferSchema({
+      foo: 'int16|littleEndian'
+    });
+
+    const schemaBuffer = schema.encode({
+      foo: 0x7F
+    });
+
+    const areEqual = areBuffersEqual(schemaBuffer, expectedBuffer);
+
+    expect(areEqual).to.be.true;
+  });
+
+  it('should decode an int16 using big endian', () => {
+    const buffer = new ArrayBuffer(2);
+    const bufferView = new DataView(buffer);
+    bufferView.setInt16(0, 0x7F);
+
+    const schema = new BufferSchema({
+      foo: 'int16'
+    });
+
+    const decodedObject = schema.decode(buffer);
+
+    expect(decodedObject).to.deep.eq({
+      foo: 0x7F
+    });
+  });
+
+  it('should decode an int16 using little endian', () => {
+    const buffer = new ArrayBuffer(2);
+    const bufferView = new DataView(buffer);
+    bufferView.setInt16(0, 0x7F, true);
+
+    const schema = new BufferSchema({
+      foo: 'int16|littleEndian'
+    });
+
+    const decodedObject = schema.decode(buffer);
+
+    expect(decodedObject).to.deep.eq({
+      foo: 0x7F
+    });
+  });
+
+  it('should encode an array of uint8', () => {
     const expectedBuffer = new ArrayBuffer(3);
     const expectedBufferDataView = new DataView(expectedBuffer);
     expectedBufferDataView.setUint8(0, 2);
@@ -58,7 +130,7 @@ describe('#schema', () => {
     expect(areEqual).to.be.true;
   });
 
-  it('should decode an array', () => {
+  it('should decode an array of uint8', () => {
     const buffer = new ArrayBuffer(3);
     const bufferDataView = new DataView(buffer);
     bufferDataView.setUint8(0, 2);
@@ -74,6 +146,23 @@ describe('#schema', () => {
     expect(decodedObject).to.deep.eq({
       foo: [4, 9]
     });
+  });
+
+  it('should decode a strings with different encodings', () => {
+    const target = {
+      foo: 'bar',
+      bar: 'baz'
+    };
+
+    const schema = new BufferSchema({
+      foo: 'string|utf8',
+      bar: 'string|utf16'
+    });
+
+    const buffer = schema.encode(target);
+    const decodedObject = schema.decode(buffer);
+
+    expect(decodedObject).to.deep.equal(target);
   });
 
   it('should encode a nested array of primitives', () => {
@@ -161,18 +250,18 @@ describe('#schema', () => {
     const schema = new BufferSchema({
       int8Test: 'int8',
       uint8Test: 'uint8',
-      int16leTest: 'int16le',
-      int16beTest: 'int16be',
-      uint16leTest: 'uint16le',
-      uint16beTest: 'uint16be',
-      int32leTest: 'int32le',
-      int32beTest: 'int32be',
-      uint32leTest: 'uint32le',
-      uint32beTest: 'uint32be',
-      float32leTest: 'float32le',
-      float32beTest: 'float32be',
-      float64leTest: 'float64le',
-      float64beTest: 'float64be'
+      int16leTest: 'int16|littleEndian',
+      int16beTest: 'int16',
+      uint16leTest: 'uint16|littleEndian',
+      uint16beTest: 'uint16',
+      int32leTest: 'int32|littleEndian',
+      int32beTest: 'int32',
+      uint32leTest: 'uint32|littleEndian',
+      uint32beTest: 'uint32',
+      float32leTest: 'float32|littleEndian',
+      float32beTest: 'float32',
+      float64leTest: 'float64|littleEndian',
+      float64beTest: 'float64'
     });
 
     const schemaBuffer = schema.encode({
@@ -197,56 +286,59 @@ describe('#schema', () => {
     expect(areEqual).to.be.true;
   });
 
-  it('should encode a complex object and use transformation', () => {
+  it('should decode a complex object', () => {
+    const expectedBuffer = new ArrayBuffer(50);
+    const expectedBufferDataView = new DataView(expectedBuffer);
+    expectedBufferDataView.setInt8(0, 0x7F);
+    expectedBufferDataView.setUint8(1, 0xFF);
+    expectedBufferDataView.setInt16(2, 0x7FFF, true);
+    expectedBufferDataView.setInt16(4, 0x7FFF, false);
+    expectedBufferDataView.setUint16(6, 0xFFFF, true);
+    expectedBufferDataView.setUint16(8, 0xFFFF, false);
+    expectedBufferDataView.setInt32(10, 0x7FFFFFFF, true);
+    expectedBufferDataView.setInt32(14, 0x7FFFFFFF, false);
+    expectedBufferDataView.setUint32(18, 0xFFFFFFFF, true);
+    expectedBufferDataView.setUint32(22, 0xFFFFFFFF, false);
+    expectedBufferDataView.setFloat32(26, Math.PI, true);
+    expectedBufferDataView.setFloat32(30, Math.PI, false);
+    expectedBufferDataView.setFloat64(34, Math.PI, true);
+    expectedBufferDataView.setFloat64(42, Math.PI, false);
+
     const schema = new BufferSchema({
-      id: 'string',
-      ownerId: 'string',
-      name: 'string',
-      targets: [{ id: 'uint8' }],
-      health: 'uint16le',
-      x: 'float32le',
-      y: 'float32le'
-    }, {
-      transform: object => ({
-        id: object.id,
-        ownerId: object.ownerId,
-        name: object.name,
-        health: object.health,
-        pos: {
-          x: object.x,
-          y: object.y
-        }
-      })
+      int8Test: 'int8',
+      uint8Test: 'uint8',
+      int16leTest: 'int16|littleEndian',
+      int16beTest: 'int16',
+      uint16leTest: 'uint16|littleEndian',
+      uint16beTest: 'uint16',
+      int32leTest: 'int32|littleEndian',
+      int32beTest: 'int32',
+      uint32leTest: 'uint32|littleEndian',
+      uint32beTest: 'uint32',
+      float32leTest: 'float32|littleEndian',
+      float32beTest: 'float32',
+      float64leTest: 'float64|littleEndian',
+      float64beTest: 'float64'
     });
 
-    const player = {
-      id: '32165478-QWERTYUI-98765412-ASDFG',
-      ownerId: 'ASDFGHJK-98765412-QWERTYUI-32165',
-      name: 'Maria Magdalena',
-      targets: [{ id: 1 }, { id: 2 }, { id: 3 }],
-      health: 50,
-      x: 400.5,
-      y: 200.1
-    };
+    const decodedObject = schema.decode(expectedBuffer);
 
-    const buffer = schema.encode(player);
-
-    const expectedBuffer = new BufferCodec()
-      .string(player.id)
-      .string(player.ownerId)
-      .string(player.name)
-      .uint8(player.targets.length)
-      .uint8(player.targets[0].id)
-      .uint8(player.targets[1].id)
-      .uint8(player.targets[2].id)
-      .uint16(player.health, true)
-      .float32(player.x, true)
-      .float32(player.y, true)
-      .result();
-    
-    const areEqual = areBuffersEqual(buffer, expectedBuffer);
-
-    expect(areEqual).to.be.true;
+    (expect(decodedObject).to as any).roughly.deep.eq({
+      int8Test: 0x7F,
+      uint8Test: 0xFF,
+      int16leTest: 0x7FFF,
+      int16beTest: 0x7FFF,
+      uint16leTest: 0xFFFF,
+      uint16beTest: 0xFFFF,
+      int32leTest: 0x7FFFFFFF,
+      int32beTest: 0x7FFFFFFF,
+      uint32leTest: 0xFFFFFFFF,
+      uint32beTest: 0xFFFFFFFF,
+      float32leTest: Math.PI,
+      float32beTest: Math.PI,
+      float64leTest: Math.PI,
+      float64beTest: Math.PI,
+    });
   });
 
 });

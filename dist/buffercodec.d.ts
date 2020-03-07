@@ -1,12 +1,8 @@
 /// <reference types="node" />
-export declare type BufferStringEncoding = 'utf8' | 'utf16';
-export declare type BufferDecodeType = 'int8' | 'uint8' | 'int16le' | 'uint16le' | 'int16be' | 'uint16be' | 'int32le' | 'uint32le' | 'int32be' | 'uint32be' | 'float32le' | 'float32be' | 'float64le' | 'float64be' | 'string' | 'array';
-export interface BufferValueProperties {
-    type: BufferDecodeType;
-    encoding?: BufferStringEncoding;
-}
+import { BufferStringEncoding, BufferTypeOptions } from "./buffer.types";
+export declare type BufferDecodeType = 'int8' | 'uint8' | 'int16le' | 'uint16le' | 'int16be' | 'uint16be' | 'int32le' | 'uint32le' | 'int32be' | 'uint32be' | 'float32le' | 'float32be' | 'float64le' | 'float64be' | 'string';
 export interface BufferTemplate {
-    [key: string]: BufferTemplate | BufferTemplate[] | BufferDecodeType | BufferDecodeType[];
+    [key: string]: BufferTemplate | BufferTemplate[] | string | string[];
 }
 export interface BufferCodecConstructorOptions {
     buffer?: ArrayBuffer;
@@ -21,6 +17,7 @@ export declare class BufferCodec {
     static from(buffer: Buffer | ArrayBuffer): BufferCodec;
     getBuffer(trimOffset?: boolean): ArrayBuffer;
     result(): ArrayBuffer;
+    decode(options: BufferTypeOptions): any;
     parse(template: BufferTemplate | BufferTemplate[], transform?: (result: any) => any | any[]): any | any[];
     string(value: string): BufferCodec;
     int8(value: number): BufferCodec;
