@@ -4,8 +4,8 @@ node_js:
 # before_install: npm install -g mocha
 before_script:
   - npm install
-  - npm build
-script: npm ci-test
+  - npm run build
+script: npm run ci-test
 after_success: npm publish
 sudo: false
 env:
