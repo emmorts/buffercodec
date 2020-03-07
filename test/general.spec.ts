@@ -1,5 +1,5 @@
-import { BufferCodec } from '../lib';
 import { expect } from 'chai';
+import { BufferCodec } from '../lib';
 import { areBuffersEqual } from './utils';
 
 describe('#general', () => {

@@ -2,8 +2,7 @@ import { BufferCodec } from "./BufferCodec";
 import { BufferSchema } from "./BufferSchema";
 import { BufferStrategy } from "./BufferStrategy";
 import { BufferTemplate, BufferValueTemplate } from "./buffer.types";
-import { IStrategyBuilder } from "./strategies/IStrategyBuilder";
-import { IStrategy } from "./strategies/IStrategy";
+import { StrategyBase } from "./strategies/StrategyBase";
 
 export {
   BufferCodec,
@@ -11,6 +10,5 @@ export {
   BufferStrategy,
   BufferTemplate,
   BufferValueTemplate,
-  IStrategyBuilder,
-  IStrategy
+  StrategyBase,
 }

@@ -1,5 +1,5 @@
-import { BufferSchema, BufferCodec } from '../lib';
 import * as chai from 'chai';
+import { BufferSchema, BufferCodec } from '../lib';
 import { areBuffersEqual } from './utils';
 
 const expect = chai.expect;

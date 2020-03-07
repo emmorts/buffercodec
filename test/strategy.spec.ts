@@ -1,10 +1,6 @@
 import { expect } from 'chai';
-import { BufferCodec } from '../lib/BufferCodec';
+import { BufferCodec, BufferStrategy, StrategyBase, BufferValueTemplate } from '../lib';
 import { areBuffersEqual } from './utils';
-import { BufferStrategy } from '../lib/BufferStrategy';
-import { StrategyBase } from '../lib/strategies/StrategyBase';
-import { BufferValueTemplate } from '../lib/buffer.types';
-
 
 describe('#strategy', () => {
 

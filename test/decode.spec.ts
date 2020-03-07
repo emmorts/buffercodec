@@ -1,5 +1,5 @@
-import { BufferCodec, BufferSchema } from '../lib';
 import { expect } from 'chai';
+import { BufferCodec } from '../lib';
 
 describe('#decode', () => {
 
