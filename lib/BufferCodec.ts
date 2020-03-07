@@ -1,4 +1,4 @@
-import { BufferStringEncoding, BufferTypeOptions, BufferContentType, BufferTemplate } from "./buffer.types";
+import { BufferStringEncoding, BufferTypeOptions, BufferContentType, BufferTemplate } from "./Buffer.types";
 import { BufferStrategy } from "./BufferStrategy";
 
 interface BufferJob {

@@ -1,5 +1,5 @@
 import { BufferCodec } from "../BufferCodec";
-import { BufferValueTemplate } from '../buffer.types';
+import { BufferValueTemplate } from "../Buffer.types";
 import { StrategyBase } from "./StrategyBase";
 import { BufferStrategy } from "../BufferStrategy";
 

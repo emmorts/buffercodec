@@ -1,5 +1,5 @@
 import { BufferCodec } from './BufferCodec';
-import { BufferTemplate } from './buffer.types';
+import { BufferTemplate } from './Buffer.types';
 import { BufferStrategy } from './BufferStrategy';
 
 export class BufferSchema {

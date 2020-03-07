@@ -1,6 +1,6 @@
 import { BufferCodec } from "../BufferCodec";
 import { IStrategy } from "./IStrategy";
-import { BufferValueTemplate } from "../buffer.types";
+import { BufferValueTemplate } from "../Buffer.types";
 
 export abstract class StrategyBase implements IStrategy {
   static supports(template: BufferValueTemplate): boolean {

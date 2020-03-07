@@ -1,6 +1,6 @@
 import { BufferCodec } from "../BufferCodec";
 import { IStrategy } from "./IStrategy";
-import { BufferValueTemplate } from '../buffer.types';
+import { BufferValueTemplate } from "../Buffer.types";
 
 export interface IStrategyBuilder<T extends IStrategy> {
   new(): T;

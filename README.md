@@ -16,8 +16,14 @@ You may install the package via:
  - bower `bower install buffercodec`
  - git `git clone https://github.com/emmorts/buffercodec`
 
-Usage
------
+# Table of Contents
+1. [Quick start](#quickstart)
+2. [Re-usable templates](#schemas)
+3. [Types](#types)
+    1. [Custom types](#customtypes)
+
+# Quick start <a name="quickstart"></a>
+
 Encoding to buffer is as simple as this:
 
 ```javascript
@@ -86,6 +92,126 @@ result: [
   {id: 5, value: 25}
 ]
 */
+```
+
+# Types <a name="types"></a>
+
+BufferCodec supports the following types out of the box:
+  * `int8`
+  * `uint8`
+  * `int16` (littleEndian)
+  * `uint16` (littleEndian)
+  * `int32` (littleEndian)
+  * `uint32` (littleEndian)
+  * `float32` (littleEndian)
+  * `float64` (littleEndian)
+  * `string` (utf8/utf16)
+
+The properties in parentheses can be used in a template like so:
+
+```typescript
+const result = BufferCodec
+  .from(buffer)
+  .parse({
+    id: 'int16|littleEndian',
+    value: 'float32',
+    label: 'string|utf8'
+  });
+```
+
+Types can be wrapped in an array to indicate that an array is expected for the property:
+
+```typescript
+const result = BufferCodec
+  .from(buffer)
+  .parse({
+    x: ['int16'],
+    y: ['int16']
+  });
+```
+> Note: when encoding arrays using BufferCodec, you need to supply length encoded in a uint8 value before encoding the objects. It is therefore recommended to use BufferSchema, which does this for you.
+
+Nested objects can also be used:
+
+```typescript
+const result = BufferCodec
+  .from(buffer)
+  .parse({
+    foo: {
+      bar: {
+        baz: ['uint8']
+      }
+    },
+  });
+```
+
+# Re-usable templates <a name="schemas"></a>
+Package includes class BufferSchema which allows you to define a schema per type and re-use it.
+
+```typescript
+const pointSchema = new BufferSchema({
+  x: 'float32',
+  y: 'float32'
+});
+
+const buffer = pointSchema.encode({
+  x: Math.PI,
+  y: Math.PI
+});
+
+const point = pointSchema.decode(buffer);
+```
+
+## Custom types <a name="customtypes"></a>
+You can also add your custom strategy for encoding and decoding objects.
+
+First, create a new strategy class implementing StrategyBase:
+
+```typescript
+class PointStrategy implements StrategyBase {
+
+  static supports(template: BufferValueTemplate): boolean {
+    return typeof(template) === 'string' && template === 'point';
+  }
+
+  static encode(value: any, template: BufferValueTemplate, codec: BufferCodec) {
+    const point = value as { x: number, y: number };
+
+    codec.float32(point.x);
+    codec.float32(point.y);
+  }
+
+  static decode(template: BufferValueTemplate, codec: BufferCodec): any {
+    return {
+      x: codec.decode({ type: 'float32' }),
+      y: codec.decode({ type: 'float32' })
+    }
+  }
+  
+}
+```
+
+Add the strategy:
+```typescript
+BufferStrategy.addStrategy(PointStrategy);
+```
+
+Now whenever codec encounters type `'point'`, it will use your provided strategy.
+```typescript
+const playerSchema = new BufferSchema({
+  id: 'uint32',
+  name: 'string',
+  position: 'point'
+});
+
+playerSchema.encode({
+  id: 42,
+  name: 'AzureDiamond',
+  position: {
+    x: Math.PI,
+    y: Math.PI
+  }
+});
 ```
 
 Methods

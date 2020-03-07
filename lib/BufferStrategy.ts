@@ -1,7 +1,7 @@
 import { BufferCodec } from "./BufferCodec";
 import { IStrategyBuilder } from "./strategies/IStrategyBuilder";
 import { IStrategy } from "./strategies/IStrategy";
-import { BufferValueTemplate, BufferTypeOptions } from "./buffer.types";
+import { BufferValueTemplate, BufferTypeOptions } from "./Buffer.types";
 import { Strategies } from "./strategies";
 
 export class BufferStrategy {

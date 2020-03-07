@@ -1,4 +1,4 @@
-import { BufferTemplate, BufferValueTemplate } from '../buffer.types';
+import { BufferTemplate, BufferValueTemplate } from "../Buffer.types";
 import { BufferStrategy } from "../BufferStrategy";
 import { BufferCodec } from "../BufferCodec";
 import { StrategyBase } from './StrategyBase';

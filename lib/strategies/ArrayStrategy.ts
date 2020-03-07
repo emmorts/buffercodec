@@ -1,6 +1,6 @@
 import { BufferCodec } from "../BufferCodec";
 import { BufferStrategy } from "../BufferStrategy";
-import { BufferValueTemplate } from '../buffer.types';
+import { BufferValueTemplate } from "../Buffer.types";
 import { StrategyBase } from "./StrategyBase";
 
 export default class ArrayStrategy implements StrategyBase {
