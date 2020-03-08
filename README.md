@@ -16,13 +16,9 @@ You may install the package via:
  - bower `bower install buffercodec`
  - git `git clone https://github.com/emmorts/buffercodec`
 
-# Table of Contents
-1. [Quick start](#quickstart)
-2. [Re-usable templates](#schemas)
-3. [Types](#types)
-    1. [Custom types](#customtypes)
+Documentation is available [here](http://emmorts.github.io/buffercodec/)
 
-# Quick start <a name="quickstart"></a>
+# Quick start
 
 Encoding to buffer is as simple as this:
 
@@ -94,7 +90,7 @@ result: [
 */
 ```
 
-# Types <a name="types"></a>
+# Types
 
 BufferCodec supports the following types out of the box:
   * `int8`
@@ -145,7 +141,7 @@ const result = BufferCodec
   });
 ```
 
-# Re-usable templates <a name="schemas"></a>
+# Re-usable templates
 Package includes class BufferSchema which allows you to define a schema per type and re-use it.
 
 ```typescript
@@ -162,7 +158,7 @@ const buffer = pointSchema.encode({
 const point = pointSchema.decode(buffer);
 ```
 
-## Custom types <a name="customtypes"></a>
+## Custom types
 You can also add your custom strategy for encoding and decoding objects.
 
 First, create a new strategy class implementing StrategyBase:
