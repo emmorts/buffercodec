@@ -1,9 +1,7 @@
 import { BufferCodec } from "../BufferCodec";
-import { IStrategy } from "./IStrategy";
 import { BufferValueTemplate } from "../Buffer.types";
 
-export abstract class StrategyBase implements IStrategy {
-  
+export abstract class StrategyBase {
   /**
    * Determines whether strategy is able to encode and decode provided template
    * @param template Value encoding template

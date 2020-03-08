@@ -13,5 +13,5 @@ export type BufferValueTemplate = string | string[] | BufferValueTemplate[] | {
 }
 
 export type BufferTemplate = {
-  [key: string]: BufferValueTemplate | BufferValueTemplate[] | string | string[]
+  [key: string]: BufferValueTemplate
 }

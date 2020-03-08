@@ -1,11 +1,11 @@
 import { BufferCodec } from "./BufferCodec";
-import { IStrategyBuilder } from "./strategies/IStrategyBuilder";
-import { IStrategy } from "./strategies/IStrategy";
 import { BufferValueTemplate, BufferTypeOptions } from "./Buffer.types";
 import { Strategies } from "./strategies";
+import { StrategyBase } from "./strategies/StrategyBase";
 
 export class BufferStrategy {
-  static strategies: IStrategyBuilder<IStrategy>[] = [...Strategies];
+  /** @internal */
+  static strategies: (typeof StrategyBase)[] = [...Strategies];
 
   /**
    * Encode value using template to provided buffer
@@ -37,7 +37,7 @@ export class BufferStrategy {
    * @returns Template codec strategy
    * @throws {Error} When strategy for provided template is not found
    */
-  static getTemplateStrategy(template: BufferValueTemplate): IStrategyBuilder<IStrategy> {
+  static getTemplateStrategy(template: BufferValueTemplate): typeof StrategyBase {
     const strategy = this.strategies.find(s => s.supports(template));
     if (!strategy) {
       throw new Error(`Strategy for provided template '${template}' was not found`);
@@ -84,7 +84,7 @@ export class BufferStrategy {
    * Adds a new strategy to codec
    * @param strategy Strategy to add
    */
-  static addStrategy(strategy: IStrategyBuilder<IStrategy>) {
+  static addStrategy(strategy: typeof StrategyBase) {
     this.strategies.push(strategy);
   }
 }
