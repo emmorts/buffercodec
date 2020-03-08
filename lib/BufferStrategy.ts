@@ -9,9 +9,9 @@ export class BufferStrategy {
 
   /**
    * Encode value using template to provided buffer
-   * @param value {any} Value to encode
-   * @param template {BufferValueTemplate} Value encoding template
-   * @param bufferCodec {BufferCodec} BufferCodec containing target buffer
+   * @param value Value to encode
+   * @param template Value encoding template
+   * @param bufferCodec BufferCodec containing target buffer
    */
   static encode(value: any, template: BufferValueTemplate, bufferCodec: BufferCodec) {
     const strategy = this.getTemplateStrategy(template);
@@ -22,7 +22,8 @@ export class BufferStrategy {
   /**
    * Decode value from the buffer using template
    * @param template Value decoding template
-   * @param bufferCodec {BufferCodec} BufferCodec containing target buffer
+   * @param bufferCodec BufferCodec containing target buffer
+   * @returns Decoded value
    */
   static decode(template: BufferValueTemplate, bufferCodec: BufferCodec): any {
     const strategy = this.getTemplateStrategy(template);
@@ -32,8 +33,8 @@ export class BufferStrategy {
 
   /**
    * Retrieves a strategy for encoding and decoding the value
-   * @param template {BufferValueTemplate} Value template
-   * @returns {IStrategyBuilder<IStrategy>} Template codec strategy
+   * @param template Value template
+   * @returns Template codec strategy
    * @throws {Error} When strategy for provided template is not found
    */
   static getTemplateStrategy(template: BufferValueTemplate): IStrategyBuilder<IStrategy> {
@@ -47,8 +48,8 @@ export class BufferStrategy {
 
   /**
    * Gets options from provided value type
-   * @param type {string} Value type
-   * @returns {BufferTypeOptions & { [key: string]: any }} Type options
+   * @param type Value type
+   * @returns Type options
    * @throws {Error} When type is not provided
    */
   static getTypeOptions(type: string): BufferTypeOptions & { [key: string]: any } {
@@ -81,7 +82,7 @@ export class BufferStrategy {
 
   /**
    * Adds a new strategy to codec
-   * @param strategy {IStrategyBuilder<IStrategy>}
+   * @param strategy Strategy to add
    */
   static addStrategy(strategy: IStrategyBuilder<IStrategy>) {
     this.strategies.push(strategy);

@@ -1,20 +1,43 @@
 language: node_js
 node_js:
-- '10.13.0'
+  - "10.13.0"
 before_script:
   - npm install
   - npm run build
 script: npm run test
-after_success: npm publish
+after_success:
+  - npm run typedoc
+  - npm pack
+  # - npm publish
 sudo: false
 env:
   global:
     secure: eglPZw7bJWrAQ+pcU5Y8QFhlwcFc5zcVlhqoUNSPX/IQyfy5FUaY4J854WaZ3kMxwnfnHkh/HGrkAN2X5CA1KnxT4l5b5FoSH7hsmtKvBMFPxCM9QpF7ob4Sq1ZrMDwzHPMpWXpCfcnY5BJgPM8BlK531cv/u0JWc097xqyzyKg=
 deploy:
-  provider: npm
-  email: h.guzas@gmail.com
-  api_key:
-    secure: ZQbjUhY0gXseYfqiUfXIiH2+u5eLbyCjGRybqDB98EOd4VlXTVh4kkOVG6NX91Rc0pmEYtYmbGNq6QzoIDogR+OMGuv3qQhseRFpC6azTXnknnKPXJQj070dkh76rPy/Vn7pAxIqAMjmyvC4Cbb26oZ3RabINpeb2849pprTkEo=
-  on:
-    tags: true
-    repo: emmorts/buffercodec
+  - provider: pages
+    skip_cleanup: true
+    local_dir: docs/
+    github_token: $GITHUB_TOKEN
+    on:
+      tags: true
+  - provider: releases
+    api_key: $GITHUB_TOKEN
+    file_glob: true
+    file: "buffercodec-*.tgz"
+    skip_cleanup: true
+    on:
+      tags: true
+  - provider: npm
+    skip_cleanup: true
+    email: "h.guzas@gmail.com"
+    api_key: $NPM_TOKEN
+    on:
+      tags: true
+# deploy:
+#   provider: npm
+#   email: h.guzas@gmail.com
+#   api_key:
+#     secure: ZQbjUhY0gXseYfqiUfXIiH2+u5eLbyCjGRybqDB98EOd4VlXTVh4kkOVG6NX91Rc0pmEYtYmbGNq6QzoIDogR+OMGuv3qQhseRFpC6azTXnknnKPXJQj070dkh76rPy/Vn7pAxIqAMjmyvC4Cbb26oZ3RabINpeb2849pprTkEo=
+#   on:
+#     tags: true
+#     repo: emmorts/buffercodec

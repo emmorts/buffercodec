@@ -213,20 +213,3 @@ playerSchema.encode({
   }
 });
 ```
-
-Methods
----------------
-
-* `BufferCodec([options = { encoding: boolean, buffer: Buffer | ArrayBuffer }])` - constructor takes an optional options argument
-* `from(buffer: Buffer | ArrayBuffer)` - instantiates a new instance using provided Buffer
-* `result()` - returns the resulting buffer
-* `parse(template)` - parse buffer with given template
-* `int8(value: number)` - signed 8 bit integer
-* `uint8(value: number)` - unsigned 8 bit integer
-* `int16(value: number [, littleEndian: boolean = false])` - signed 16 bit integer (big endian by default)
-* `uint16(value: number [, littleEndian: boolean = false])` - unsigned 16 bit integer (big endian by default)
-* `int32le(value: number [, littleEndian: boolean = false])` - signed 32 bit integer (big endian by default)
-* `uint32le(value: number [, littleEndian: boolean = false])` - unsigned 32 bit integer (big endian by default)
-* `float32be(value: number [, littleEndian: boolean = false])` - 32-bit float (big endian by default)
-* `float64be(value: number [, littleEndian: boolean = false])` - 64-bit float (big endian by default)
-* `string(value: string [, encoding: 'utf8' | 'utf16'])` - write a string with the given encoding (default is *utf16*)

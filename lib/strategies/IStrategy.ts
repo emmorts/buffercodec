@@ -1,1 +1,2 @@
+/** @internal */
 export interface IStrategy {}

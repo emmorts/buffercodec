@@ -1,6 +1,7 @@
 import { BufferStringEncoding, BufferTypeOptions, BufferContentType, BufferTemplate } from "./Buffer.types";
 import { BufferStrategy } from "./BufferStrategy";
 
+/** @internal */
 interface BufferJob {
   type: BufferContentType,
   value: number | string,
