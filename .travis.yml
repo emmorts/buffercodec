@@ -8,7 +8,6 @@ script: npm run test
 after_success:
   - npm run typedoc
   - npm pack
-  # - npm publish
 sudo: false
 env:
   global:
@@ -33,11 +32,3 @@ deploy:
     api_key: $NPM_TOKEN
     on:
       tags: true
-# deploy:
-#   provider: npm
-#   email: h.guzas@gmail.com
-#   api_key:
-#     secure: ZQbjUhY0gXseYfqiUfXIiH2+u5eLbyCjGRybqDB98EOd4VlXTVh4kkOVG6NX91Rc0pmEYtYmbGNq6QzoIDogR+OMGuv3qQhseRFpC6azTXnknnKPXJQj070dkh76rPy/Vn7pAxIqAMjmyvC4Cbb26oZ3RabINpeb2849pprTkEo=
-#   on:
-#     tags: true
-#     repo: emmorts/buffercodec

@@ -1,5 +1,3 @@
-import { IStrategy } from "./IStrategy";
-import { IStrategyBuilder } from "./IStrategyBuilder";
 import ArrayStrategy from "./ArrayStrategy";
 import UInt8Strategy from "./UInt8Strategy";
 import ObjectStrategy from "./ObjectStrategy";
@@ -11,8 +9,9 @@ import Int32Strategy from "./Int32Strategy";
 import Float32Strategy from "./Float32Strategy";
 import Float64Strategy from "./Float64Strategy";
 import StringStrategy from "./StringStrategy";
+import { StrategyBase } from "..";
 
-export const Strategies: IStrategyBuilder<IStrategy>[] = [
+export const Strategies: typeof StrategyBase[] = [
   ObjectStrategy,
   ArrayStrategy,
   UInt8Strategy,
@@ -24,4 +23,4 @@ export const Strategies: IStrategyBuilder<IStrategy>[] = [
   Float32Strategy,
   Float64Strategy,
   StringStrategy
-]
+];
