@@ -192,7 +192,7 @@ class PointStrategy implements StrategyBase<Point> {
 
 Add the strategy:
 ```typescript
-BufferStrategy.addStrategy(PointStrategy);
+BufferStrategy.add(PointStrategy);
 ```
 
 Now whenever codec encounters type `'point'`, it will use your provided strategy.
