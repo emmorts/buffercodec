@@ -5,11 +5,11 @@ import { StrategyBase } from './StrategyBase';
 
 export default class ObjectStrategy implements StrategyBase {
 
-  static supports(template: BufferValueTemplate): boolean {
+  supports(template: BufferValueTemplate): boolean {
     return Object.prototype.toString.call(template) === '[object Object]' && (template as BufferTemplate) != null;
   }
 
-  static encode(value: any, template: BufferValueTemplate, codec: BufferCodec) {
+  encode(value: any, template: BufferValueTemplate, codec: BufferCodec) {
     const objectTemplate = template as BufferTemplate;
 
     for (const propertyName in objectTemplate) {
@@ -17,7 +17,7 @@ export default class ObjectStrategy implements StrategyBase {
     }
   }
 
-  static decode(template: BufferValueTemplate, codec: BufferCodec): any {
+  decode(template: BufferValueTemplate, codec: BufferCodec): any {
     const objectTemplate = template as BufferTemplate;
     const result: any = {};
 

@@ -11,7 +11,7 @@ import Float64Strategy from "./Float64Strategy";
 import StringStrategy from "./StringStrategy";
 import { StrategyBase } from "..";
 
-export const Strategies: typeof StrategyBase[] = [
+export default [
   ObjectStrategy,
   ArrayStrategy,
   UInt8Strategy,
@@ -23,4 +23,4 @@ export const Strategies: typeof StrategyBase[] = [
   Float32Strategy,
   Float64Strategy,
   StringStrategy
-];
+] as { new(): StrategyBase }[];

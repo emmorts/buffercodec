@@ -2,17 +2,17 @@ import { BufferCodec } from "../BufferCodec";
 import { BufferValueTemplate } from "../Buffer.types";
 import { StrategyBase } from "./StrategyBase";
 
-export default class Int8Strategy implements StrategyBase {
+export default class Int8Strategy implements StrategyBase<number> {
 
-  static supports(template: BufferValueTemplate): boolean {
+  supports(template: BufferValueTemplate): boolean {
     return typeof(template) === 'string' && template === 'int8';
   }
 
-  static encode(value: any, template: BufferValueTemplate, codec: BufferCodec) {
+  encode(value: number, template: BufferValueTemplate, codec: BufferCodec) {
     codec.int8(value);
   }
 
-  static decode(template: BufferValueTemplate, codec: BufferCodec): any {
+  decode(template: BufferValueTemplate, codec: BufferCodec): number {
     return codec.decode({ type: 'int8' });
   }
   

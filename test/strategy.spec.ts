@@ -21,14 +21,14 @@ describe('#strategy', () => {
   it('should use a newly added strategy to encode a type', () => {
     const bufferCodec = new BufferCodec();
     
-    BufferStrategy.addStrategy(LifeStrategy);
-    BufferStrategy.encode(null, 'foo', bufferCodec);
+    BufferStrategy.encode({ x: 1, y: 2 }, 'point', bufferCodec);
 
     const buffer = bufferCodec.result();
 
-    const expectedBuffer = new ArrayBuffer(1);
-    const uint8Array = new Uint8Array(expectedBuffer);
-    uint8Array[0] = 42;
+    const expectedBuffer = new ArrayBuffer(4);
+    const epxectedBufferDataView = new DataView(expectedBuffer);
+    epxectedBufferDataView.setInt16(0, 1);
+    epxectedBufferDataView.setInt16(2, 2);
     
     const areEqual = areBuffersEqual(buffer, expectedBuffer);
 
@@ -36,28 +36,46 @@ describe('#strategy', () => {
   });
 
   it('should use a newly added strategy to decode a type', () => {
-    const bufferCodec = new BufferCodec();
-    
-    BufferStrategy.addStrategy(LifeStrategy);
-    const result = BufferStrategy.decode('foo', bufferCodec);
+    const expectedBuffer = new ArrayBuffer(4);
+    const epxectedBufferDataView = new DataView(expectedBuffer);
+    epxectedBufferDataView.setInt16(0, 1);
+    epxectedBufferDataView.setInt16(2, 2);
 
-    expect(result).to.be.eq(42);
+    const bufferCodec = BufferCodec.from(expectedBuffer);
+    
+    const result = BufferStrategy.decode('point', bufferCodec);
+
+    expect(result).to.be.deep.eq({
+      x: 1,
+      y: 2
+    });
   });
 
 });
 
-class LifeStrategy implements StrategyBase {
+interface Point {
+  x: number,
+  y: number
+}
 
-  static supports(template: BufferValueTemplate): boolean {
-    return typeof(template) === 'string' && template === 'foo';
+class PointStrategy implements StrategyBase<Point> {
+
+  supports(template: BufferValueTemplate): boolean {
+    return typeof(template) === 'string' && template === 'point';
   }
 
-  static encode(value: any, template: BufferValueTemplate, codec: BufferCodec) {
-    codec.uint8(42);
+  encode(point: Point, template: BufferValueTemplate, codec: BufferCodec) {
+    codec.int16(point.x);
+    codec.int16(point.y);
   }
 
-  static decode(template: BufferValueTemplate, codec: BufferCodec): any {
-    return 42;
+  decode(template: BufferValueTemplate, codec: BufferCodec): Point {
+    return {
+      x: codec.decode({ type: 'int16' }),
+      y: codec.decode({ type: 'int16' })
+    }
   }
   
 }
+
+BufferStrategy.add(PointStrategy);

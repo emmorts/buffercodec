@@ -164,20 +164,23 @@ You can also add your custom strategy for encoding and decoding objects.
 First, create a new strategy class implementing StrategyBase:
 
 ```typescript
-class PointStrategy implements StrategyBase {
+interface Point {
+  x: number,
+  y: number
+}
 
-  static supports(template: BufferValueTemplate): boolean {
+class PointStrategy implements StrategyBase<Point> {
+
+  supports(template: BufferValueTemplate): boolean {
     return typeof(template) === 'string' && template === 'point';
   }
 
-  static encode(value: any, template: BufferValueTemplate, codec: BufferCodec) {
-    const point = value as { x: number, y: number };
-
+  encode(point: Point, template: BufferValueTemplate, codec: BufferCodec) {
     codec.float32(point.x);
     codec.float32(point.y);
   }
 
-  static decode(template: BufferValueTemplate, codec: BufferCodec): any {
+  decode(template: BufferValueTemplate, codec: BufferCodec): Point {
     return {
       x: codec.decode({ type: 'float32' }),
       y: codec.decode({ type: 'float32' })

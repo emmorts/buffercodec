@@ -3,9 +3,9 @@ import { BufferValueTemplate } from "../Buffer.types";
 import { StrategyBase } from "./StrategyBase";
 import { BufferStrategy } from "../BufferStrategy";
 
-export default class StringStrategy implements StrategyBase {
+export default class StringStrategy implements StrategyBase<string> {
 
-  static supports(template: BufferValueTemplate): boolean {
+  supports(template: BufferValueTemplate): boolean {
     if (typeof(template) !== 'string') {
       return false;
     }
@@ -15,13 +15,13 @@ export default class StringStrategy implements StrategyBase {
     return typeOptions.type === 'string';
   }
 
-  static encode(value: any, template: BufferValueTemplate, codec: BufferCodec) {
+  encode(value: string, template: BufferValueTemplate, codec: BufferCodec) {
     const typeOptions = BufferStrategy.getTypeOptions(template as string);
 
     codec.string(value, typeOptions.encoding);
   }
 
-  static decode(template: BufferValueTemplate, codec: BufferCodec): any {
+  decode(template: BufferValueTemplate, codec: BufferCodec): string {
     return codec.decode(BufferStrategy.getTypeOptions(template as string));
   }
   

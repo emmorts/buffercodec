@@ -1,12 +1,12 @@
 import { BufferCodec } from "../BufferCodec";
 import { BufferValueTemplate } from "../Buffer.types";
 
-export abstract class StrategyBase {
+export abstract class StrategyBase<T=any> {
   /**
    * Determines whether strategy is able to encode and decode provided template
    * @param template Value encoding template
    */
-  static supports(template: BufferValueTemplate): boolean {
+  supports(template: BufferValueTemplate): boolean {
     throw new Error(`supports() method not implemented on ${this.constructor.name}`);
   }
   
@@ -16,7 +16,7 @@ export abstract class StrategyBase {
    * @param template Value encoding template
    * @param bufferCodec BufferCodec containing target buffer
    */
-  static encode(value: any, template: BufferValueTemplate, codec: BufferCodec) {
+  encode(value: T, template: BufferValueTemplate, codec: BufferCodec) {
     throw new Error(`encode() method not implemented on ${this.constructor.name}`);
   }
 
@@ -26,7 +26,7 @@ export abstract class StrategyBase {
    * @param bufferCodec BufferCodec containing target buffer
    * @returns Decoded value
    */
-  static decode(template: BufferValueTemplate, codec: BufferCodec): any {
+  decode(template: BufferValueTemplate, codec: BufferCodec): T {
     throw new Error(`decode() method not implemented on ${this.constructor.name}`);
   }
 }
