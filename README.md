@@ -68,12 +68,14 @@ import { BufferCodec } from "buffercodec";
 const length = 5;
 const buffer = new BufferCodec().uint8(length);
 
-for (let i = 0; i < length; i++) {
-  buffer.uint8(i).uint16(i*i);
+for (let i = 1; i < length + 1; i++) {
+  buffer
+    .uint8(i)
+    .uint16(i * i);
 }
 
 const result = BufferCodec
-  .from(buffer)
+  .from(buffer.result())
   .parse([{
     id: 'uint8',
     value: 'uint16'
