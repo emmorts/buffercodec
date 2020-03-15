@@ -79,19 +79,9 @@
 					<li>bower <code>bower install buffercodec</code></li>
 					<li>git <code>git clone https://github.com/emmorts/buffercodec</code></li>
 				</ul>
-				<a href="#table-of-contents" id="table-of-contents" style="color: inherit; text-decoration: none;">
-					<h1>Table of Contents</h1>
-				</a>
-				<ol>
-					<li><a href="#quickstart">Quick start</a></li>
-					<li><a href="#schemas">Re-usable templates</a></li>
-					<li><a href="#types">Types</a><ol>
-							<li><a href="#customtypes">Custom types</a></li>
-						</ol>
-					</li>
-				</ol>
-				<a href="#quick-start-a-namequickstarta" id="quick-start-a-namequickstarta" style="color: inherit; text-decoration: none;">
-					<h1>Quick start <a name="quickstart"></a></h1>
+				<p>Documentation is available <a href="http://emmorts.github.io/buffercodec/">here</a></p>
+				<a href="#quick-start" id="quick-start" style="color: inherit; text-decoration: none;">
+					<h1>Quick start</h1>
 				</a>
 				<p>Encoding to buffer is as simple as this:</p>
 				<pre><code class="language-javascript"><span class="hljs-keyword">import</span> { BufferCodec } <span class="hljs-keyword">from</span> <span class="hljs-string">"buffercodec"</span>;
@@ -131,12 +121,14 @@ object: {
 <span class="hljs-keyword">const</span> length = <span class="hljs-number">5</span>;
 <span class="hljs-keyword">const</span> buffer = <span class="hljs-keyword">new</span> BufferCodec().uint8(length);
 
-<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; length; i++) {
-  buffer.uint8(i).uint16(i*i);
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">1</span>; i &lt; length + <span class="hljs-number">1</span>; i++) {
+  buffer
+    .uint8(i)
+    .uint16(i * i);
 }
 
 <span class="hljs-keyword">const</span> result = BufferCodec
-  .from(buffer)
+  .from(buffer.result())
   .parse([{
     <span class="hljs-attr">id</span>: <span class="hljs-string">'uint8'</span>,
     <span class="hljs-attr">value</span>: <span class="hljs-string">'uint16'</span>
@@ -151,8 +143,8 @@ result: [
   {id: 5, value: 25}
 ]
 */</span></code></pre>
-				<a href="#types-a-nametypesa" id="types-a-nametypesa" style="color: inherit; text-decoration: none;">
-					<h1>Types <a name="types"></a></h1>
+				<a href="#types" id="types" style="color: inherit; text-decoration: none;">
+					<h1>Types</h1>
 				</a>
 				<p>BufferCodec supports the following types out of the box:</p>
 				<ul>
@@ -194,8 +186,8 @@ result: [
       }
     },
   });</code></pre>
-				<a href="#re-usable-templates-a-nameschemasa" id="re-usable-templates-a-nameschemasa" style="color: inherit; text-decoration: none;">
-					<h1>Re-usable templates <a name="schemas"></a></h1>
+				<a href="#re-usable-templates" id="re-usable-templates" style="color: inherit; text-decoration: none;">
+					<h1>Re-usable templates</h1>
 				</a>
 				<p>Package includes class BufferSchema which allows you to define a schema per type and re-use it.</p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> pointSchema = <span class="hljs-keyword">new</span> BufferSchema({
@@ -209,25 +201,34 @@ result: [
 });
 
 <span class="hljs-keyword">const</span> point = pointSchema.decode(buffer);</code></pre>
-				<a href="#custom-types-a-namecustomtypesa" id="custom-types-a-namecustomtypesa" style="color: inherit; text-decoration: none;">
-					<h2>Custom types <a name="customtypes"></a></h2>
+				<p>Templates also support nullable types. You may also append a question mark to the type to indicate that the value is nullable, thus preserving space on the buffer in such event:</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> result = <span class="hljs-keyword">new</span> BufferSchema({
+    id: <span class="hljs-string">'int16|littleEndian'</span>,
+    value: <span class="hljs-string">'float32?'</span>,
+    label: <span class="hljs-string">'string?|utf8'</span>
+  });</code></pre>
+				<a href="#custom-types" id="custom-types" style="color: inherit; text-decoration: none;">
+					<h2>Custom types</h2>
 				</a>
 				<p>You can also add your custom strategy for encoding and decoding objects.</p>
 				<p>First, create a new strategy class implementing StrategyBase:</p>
-				<pre><code class="language-typescript"><span class="hljs-keyword">class</span> PointStrategy <span class="hljs-keyword">implements</span> StrategyBase {
+				<pre><code class="language-typescript"><span class="hljs-keyword">interface</span> Point {
+  x: <span class="hljs-built_in">number</span>,
+  y: <span class="hljs-built_in">number</span>
+}
 
-  <span class="hljs-keyword">static</span> supports(template: BufferValueTemplate): <span class="hljs-built_in">boolean</span> {
+<span class="hljs-keyword">class</span> PointStrategy <span class="hljs-keyword">implements</span> StrategyBase&lt;Point&gt; {
+
+  supports(template: BufferValueTemplate): <span class="hljs-built_in">boolean</span> {
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span>(template) === <span class="hljs-string">'string'</span> &amp;&amp; template === <span class="hljs-string">'point'</span>;
   }
 
-  <span class="hljs-keyword">static</span> encode(value: <span class="hljs-built_in">any</span>, template: BufferValueTemplate, codec: BufferCodec) {
-    <span class="hljs-keyword">const</span> point = value <span class="hljs-keyword">as</span> { x: <span class="hljs-built_in">number</span>, y: <span class="hljs-built_in">number</span> };
-
+  encode(point: Point, template: BufferValueTemplate, codec: BufferCodec) {
     codec.float32(point.x);
     codec.float32(point.y);
   }
 
-  <span class="hljs-keyword">static</span> decode(template: BufferValueTemplate, codec: BufferCodec): <span class="hljs-built_in">any</span> {
+  decode(template: BufferValueTemplate, codec: BufferCodec): Point {
     <span class="hljs-keyword">return</span> {
       x: codec.decode({ <span class="hljs-keyword">type</span>: <span class="hljs-string">'float32'</span> }),
       y: codec.decode({ <span class="hljs-keyword">type</span>: <span class="hljs-string">'float32'</span> })
@@ -236,8 +237,8 @@ result: [
 
 }</code></pre>
 				<p>Add the strategy:</p>
-				<pre><code class="language-typescript">BufferStrategy.addStrategy(PointStrategy);</code></pre>
-				<p>Now whenever codec encounters type <code>&#39;point&#39;</code>, it will use your provided strategy.</p>
+				<pre><code class="language-typescript">BufferStrategy.add(PointStrategy);</code></pre>
+				<p>Now whenever you reference your type in BufferSchema, your provided strategy will be used.</p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> playerSchema = <span class="hljs-keyword">new</span> BufferSchema({
   id: <span class="hljs-string">'uint32'</span>,
   name: <span class="hljs-string">'string'</span>,
@@ -280,12 +281,6 @@ playerSchema.encode({
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="modules/_strategies_float64strategy_.html">&quot;strategies/<wbr>Float64<wbr>Strategy&quot;</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/_strategies_istrategy_.html">&quot;strategies/IStrategy&quot;</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/_strategies_istrategybuilder_.html">&quot;strategies/IStrategy<wbr>Builder&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="modules/_strategies_int16strategy_.html">&quot;strategies/<wbr>Int16<wbr>Strategy&quot;</a>

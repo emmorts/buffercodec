@@ -26,7 +26,7 @@ export abstract class StrategyBase<T=any> {
    * @param bufferCodec BufferCodec containing target buffer
    * @returns Decoded value
    */
-  decode(template: BufferValueTemplate, codec: BufferCodec): T {
+  decode(template: BufferValueTemplate, codec: BufferCodec): T | null {
     throw new Error(`decode() method not implemented on ${this.constructor.name}`);
   }
 }

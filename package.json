@@ -1,6 +1,6 @@
 {
   "name": "buffercodec",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Buffer codec able to encode or decode primary data types.",
   "main": "./dist/index.js",
   "types": "./dist/index.d.js",

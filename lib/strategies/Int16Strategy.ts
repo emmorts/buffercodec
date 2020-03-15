@@ -17,12 +17,34 @@ export default class Int16Strategy implements StrategyBase<number> {
 
   encode(value: number, template: BufferValueTemplate, codec: BufferCodec) {
     const typeOptions = BufferStrategy.getTypeOptions(template as string);
+    
+    if (typeOptions.nullable) {
+      const valueIsNull = value === undefined || value === null;
 
-    codec.int16(value, typeOptions.littleEndian);
+      if (valueIsNull) {
+        codec.uint8(1);
+      } else {
+        codec.uint8(0);
+        
+        codec.int16(value, typeOptions.littleEndian);
+      }
+    } else {
+      codec.int16(value, typeOptions.littleEndian);
+    }
   }
 
-  decode(template: BufferValueTemplate, codec: BufferCodec): number {
-    return codec.decode(BufferStrategy.getTypeOptions(template as string));
+  decode(template: BufferValueTemplate, codec: BufferCodec): number | null {
+    const typeOptions = BufferStrategy.getTypeOptions(template as string);
+
+    if (typeOptions.nullable) {
+      const valueIsNull = codec.decode({ type: 'uint8' });
+
+      if (valueIsNull) {
+        return null;
+      }
+    }
+
+    return codec.decode(typeOptions);
   }
   
 }

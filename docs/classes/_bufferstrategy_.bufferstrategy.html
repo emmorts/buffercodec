@@ -88,7 +88,7 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_bufferstrategy_.bufferstrategy.html#addstrategy" class="tsd-kind-icon">add<wbr>Strategy</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_bufferstrategy_.bufferstrategy.html#add" class="tsd-kind-icon">add</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_bufferstrategy_.bufferstrategy.html#decode" class="tsd-kind-icon">decode</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_bufferstrategy_.bufferstrategy.html#encode" class="tsd-kind-icon">encode</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_bufferstrategy_.bufferstrategy.html#gettemplatestrategy" class="tsd-kind-icon">get<wbr>Template<wbr>Strategy</a></li>
@@ -103,40 +103,46 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
 					<a name="strategies" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> strategies</h3>
-					<div class="tsd-signature tsd-kind-icon">strategies<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_strategies_istrategybuilder_.istrategybuilder.html" class="tsd-signature-type">IStrategyBuilder</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_strategies_istrategy_.istrategy.html" class="tsd-signature-type">IStrategy</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [...Strategies]</span></div>
+					<div class="tsd-signature tsd-kind-icon">strategies<span class="tsd-signature-symbol">:</span> <a href="_strategies_strategybase_.strategybase.html" class="tsd-signature-type">StrategyBase</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [...Strategies.map(StrategyRef &#x3D;&gt; new StrategyRef())]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/emmorts/buffercodec/blob/ef8e117/lib/BufferStrategy.ts#L8">BufferStrategy.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/emmorts/buffercodec/blob/b0af869/lib/BufferStrategy.ts#L8">BufferStrategy.ts:8</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<dl class="tsd-comment-tags">
+							<dt>internal</dt>
+							<dd></dd>
+						</dl>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="addstrategy" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> add<wbr>Strategy</h3>
+					<a name="add" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> add</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">add<wbr>Strategy<span class="tsd-signature-symbol">(</span>strategy<span class="tsd-signature-symbol">: </span><a href="../interfaces/_strategies_istrategybuilder_.istrategybuilder.html" class="tsd-signature-type">IStrategyBuilder</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_strategies_istrategy_.istrategy.html" class="tsd-signature-type">IStrategy</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">add<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>strategies<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>constructor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/emmorts/buffercodec/blob/ef8e117/lib/BufferStrategy.ts#L87">BufferStrategy.ts:87</a></li>
+									<li>Defined in <a href="https://github.com/emmorts/buffercodec/blob/b0af869/lib/BufferStrategy.ts#L87">BufferStrategy.ts:87</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Adds a new strategy to codec</p>
+									<p>Adds new strategies to codec</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>strategy: <a href="../interfaces/_strategies_istrategybuilder_.istrategybuilder.html" class="tsd-signature-type">IStrategyBuilder</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_strategies_istrategy_.istrategy.html" class="tsd-signature-type">IStrategy</a><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>strategies: <span class="tsd-signature-symbol">{ </span>constructor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Strategy to add</p>
+										<p>Strategies to add</p>
 									</div>
 								</li>
 							</ul>
@@ -154,7 +160,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/emmorts/buffercodec/blob/ef8e117/lib/BufferStrategy.ts#L28">BufferStrategy.ts:28</a></li>
+									<li>Defined in <a href="https://github.com/emmorts/buffercodec/blob/b0af869/lib/BufferStrategy.ts#L28">BufferStrategy.ts:28</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -192,7 +198,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/emmorts/buffercodec/blob/ef8e117/lib/BufferStrategy.ts#L16">BufferStrategy.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/emmorts/buffercodec/blob/b0af869/lib/BufferStrategy.ts#L16">BufferStrategy.ts:16</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -229,13 +235,13 @@
 					<a name="gettemplatestrategy" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Template<wbr>Strategy</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Template<wbr>Strategy<span class="tsd-signature-symbol">(</span>template<span class="tsd-signature-symbol">: </span><a href="../modules/_buffer_types_.html#buffervaluetemplate" class="tsd-signature-type">BufferValueTemplate</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_strategies_istrategybuilder_.istrategybuilder.html" class="tsd-signature-type">IStrategyBuilder</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_strategies_istrategy_.istrategy.html" class="tsd-signature-type">IStrategy</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Template<wbr>Strategy<span class="tsd-signature-symbol">(</span>template<span class="tsd-signature-symbol">: </span><a href="../modules/_buffer_types_.html#buffervaluetemplate" class="tsd-signature-type">BufferValueTemplate</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_strategies_strategybase_.strategybase.html" class="tsd-signature-type">StrategyBase</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/emmorts/buffercodec/blob/ef8e117/lib/BufferStrategy.ts#L40">BufferStrategy.ts:40</a></li>
+									<li>Defined in <a href="https://github.com/emmorts/buffercodec/blob/b0af869/lib/BufferStrategy.ts#L40">BufferStrategy.ts:40</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -257,7 +263,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_strategies_istrategybuilder_.istrategybuilder.html" class="tsd-signature-type">IStrategyBuilder</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_strategies_istrategy_.istrategy.html" class="tsd-signature-type">IStrategy</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="_strategies_strategybase_.strategybase.html" class="tsd-signature-type">StrategyBase</a></h4>
 							<p>Template codec strategy</p>
 						</li>
 					</ul>
@@ -272,7 +278,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/emmorts/buffercodec/blob/ef8e117/lib/BufferStrategy.ts#L55">BufferStrategy.ts:55</a></li>
+									<li>Defined in <a href="https://github.com/emmorts/buffercodec/blob/b0af869/lib/BufferStrategy.ts#L55">BufferStrategy.ts:55</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -329,12 +335,6 @@
 						<a href="../modules/_strategies_float64strategy_.html">&quot;strategies/<wbr>Float64<wbr>Strategy&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="../modules/_strategies_istrategy_.html">&quot;strategies/IStrategy&quot;</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/_strategies_istrategybuilder_.html">&quot;strategies/IStrategy<wbr>Builder&quot;</a>
-					</li>
-					<li class=" tsd-kind-module">
 						<a href="../modules/_strategies_int16strategy_.html">&quot;strategies/<wbr>Int16<wbr>Strategy&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -374,7 +374,7 @@
 								<a href="_bufferstrategy_.bufferstrategy.html#strategies" class="tsd-kind-icon">strategies</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_bufferstrategy_.bufferstrategy.html#addstrategy" class="tsd-kind-icon">add<wbr>Strategy</a>
+								<a href="_bufferstrategy_.bufferstrategy.html#add" class="tsd-kind-icon">add</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_bufferstrategy_.bufferstrategy.html#decode" class="tsd-kind-icon">decode</a>

@@ -110,6 +110,42 @@ describe('#schema', () => {
     });
   });
 
+  it('should encode a nullable int8 value', () => {
+    const expectedBuffer = new ArrayBuffer(2);
+    const expectedBufferDataView = new DataView(expectedBuffer);
+    expectedBufferDataView.setUint8(0, 0);
+    expectedBufferDataView.setInt8(1, 0x7F);
+
+    const schema = new BufferSchema({
+      foo: 'int8?'
+    });
+
+    const schemaBuffer = schema.encode({
+      foo: 0x7F
+    });
+
+    const areEqual = areBuffersEqual(schemaBuffer, expectedBuffer);
+
+    expect(areEqual).to.be.true;
+  });
+
+  it('should decode a nullable int8 value', () => {
+    const buffer = new ArrayBuffer(2);
+    const bufferView = new DataView(buffer);
+    bufferView.setInt8(0, 0);
+    bufferView.setInt8(1, 0x7F);
+
+    const schema = new BufferSchema({
+      foo: 'int8?'
+    });
+
+    const decodedObject = schema.decode(buffer);
+
+    expect(decodedObject).to.deep.eq({
+      foo: 0x7F
+    });
+  });
+
   it('should encode an array of uint8', () => {
     const expectedBuffer = new ArrayBuffer(3);
     const expectedBufferDataView = new DataView(expectedBuffer);

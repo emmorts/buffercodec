@@ -160,6 +160,16 @@ const buffer = pointSchema.encode({
 const point = pointSchema.decode(buffer);
 ```
 
+Templates also support nullable types. You may also append a question mark to the type to indicate that the value is nullable, thus preserving space on the buffer in such event:
+
+```typescript
+const result = new BufferSchema({
+    id: 'int16|littleEndian',
+    value: 'float32?',
+    label: 'string?|utf8'
+  });
+```
+
 ## Custom types
 You can also add your custom strategy for encoding and decoding objects.
 
@@ -197,7 +207,7 @@ Add the strategy:
 BufferStrategy.add(PointStrategy);
 ```
 
-Now whenever codec encounters type `'point'`, it will use your provided strategy.
+Now whenever you reference your type in BufferSchema, your provided strategy will be used.
 ```typescript
 const playerSchema = new BufferSchema({
   id: 'uint32',
