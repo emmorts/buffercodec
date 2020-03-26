@@ -8,6 +8,7 @@
     "test": "ts-mocha ./test/*.spec.ts",
     "build": "tsc",
     "typedoc": "typedoc",
+    "coverage": "nyc --reporter=lcov npm run test",
     "posttypedoc": "shx cp .nojekyll docs/.nojekyll"
   },
   "repository": {
@@ -28,6 +29,7 @@
   },
   "homepage": "https://github.com/emmorts/buffercodec#readme",
   "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@types/buffer-equal": "0.0.30",
     "@types/chai": "^4.2.11",
     "@types/mocha": "^7.0.2",
