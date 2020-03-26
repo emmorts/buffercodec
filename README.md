@@ -1,5 +1,4 @@
-Buffer Codec
-===========
+# Buffer Codec
 
 BufferCodec is a lightweight package that allows you to efficiently and easily translate between JSON and buffers
 by chaining together calls to write basic data types to buffers and other way around. It uses 
@@ -8,13 +7,13 @@ makes this package readily available for both, browsers and Node environments.
 
 [![Build Status](https://travis-ci.org/emmorts/buffercodec.svg?branch=master)](https://travis-ci.org/emmorts/buffercodec)
 
-Installation
-------------
+## Installation
+
 You may install the package via:
 
- - npm `npm install buffercodec`
- - bower `bower install buffercodec`
- - git `git clone https://github.com/emmorts/buffercodec`
+-   npm `npm install buffercodec`
+-   bower `bower install buffercodec`
+-   git `git clone https://github.com/emmorts/buffercodec`
 
 Documentation is available [here](http://emmorts.github.io/buffercodec/)
 
@@ -95,15 +94,16 @@ result: [
 # Types
 
 BufferCodec supports the following types out of the box:
-  * `int8`
-  * `uint8`
-  * `int16` (littleEndian)
-  * `uint16` (littleEndian)
-  * `int32` (littleEndian)
-  * `uint32` (littleEndian)
-  * `float32` (littleEndian)
-  * `float64` (littleEndian)
-  * `string` (utf8/utf16)
+
+-   `int8`
+-   `uint8`
+-   `int16` (littleEndian)
+-   `uint16` (littleEndian)
+-   `int32` (littleEndian)
+-   `uint32` (littleEndian)
+-   `float32` (littleEndian)
+-   `float64` (littleEndian)
+-   `string` (utf8/utf16)
 
 The properties in parentheses can be used in a template like so:
 
@@ -127,6 +127,7 @@ const result = BufferCodec
     y: ['int16']
   });
 ```
+
 > Note: when encoding arrays using BufferCodec, you need to supply length encoded in a uint8 value before encoding the objects. It is therefore recommended to use BufferSchema, which does this for you.
 
 Nested objects can also be used:
@@ -144,6 +145,7 @@ const result = BufferCodec
 ```
 
 # Re-usable templates
+
 Package includes class BufferSchema which allows you to define a schema per type and re-use it.
 
 ```typescript
@@ -171,6 +173,7 @@ const result = new BufferSchema({
 ```
 
 ## Custom types
+
 You can also add your custom strategy for encoding and decoding objects.
 
 First, create a new strategy class implementing StrategyBase:
@@ -203,11 +206,13 @@ class PointStrategy implements StrategyBase<Point> {
 ```
 
 Add the strategy:
+
 ```typescript
 BufferStrategy.add(PointStrategy);
 ```
 
 Now whenever you reference your type in BufferSchema, your provided strategy will be used.
+
 ```typescript
 const playerSchema = new BufferSchema({
   id: 'uint32',
