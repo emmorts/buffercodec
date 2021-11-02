@@ -1,14 +1,39 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const BufferStrategy_1 = require("../BufferStrategy");
 class Int8Strategy {
-    static supports(template) {
-        return typeof (template) === 'string' && template === 'int8';
+    supports(template) {
+        if (typeof (template) !== 'string') {
+            return false;
+        }
+        const typeOptions = BufferStrategy_1.BufferStrategy.getTypeOptions(template);
+        return typeOptions.type === 'int8';
     }
-    static encode(value, template, codec) {
-        codec.int8(value);
+    encode(value, template, codec) {
+        const typeOptions = BufferStrategy_1.BufferStrategy.getTypeOptions(template);
+        if (typeOptions.nullable) {
+            const valueIsNull = value === undefined || value === null;
+            if (valueIsNull) {
+                codec.uint8(1);
+            }
+            else {
+                codec.uint8(0);
+                codec.int8(value);
+            }
+        }
+        else {
+            codec.int8(value);
+        }
     }
-    static decode(template, codec) {
-        return codec.decode({ type: 'int8' });
+    decode(template, codec) {
+        const typeOptions = BufferStrategy_1.BufferStrategy.getTypeOptions(template);
+        if (typeOptions.nullable) {
+            const valueIsNull = codec.decode({ type: 'uint8' });
+            if (valueIsNull) {
+                return null;
+            }
+        }
+        return codec.decode(typeOptions);
     }
 }
 exports.default = Int8Strategy;

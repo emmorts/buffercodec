@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { BufferStringEncoding, BufferTypeOptions, BufferTemplate } from "./buffer.types";
+import { BufferStringEncoding, BufferTypeOptions, BufferTemplate } from "./Buffer.types";
 export interface BufferCodecConstructorOptions {
     buffer?: ArrayBuffer;
     encoding?: BufferStringEncoding;

@@ -1,4 +1,4 @@
-import { BufferTemplate } from './buffer.types';
+import { BufferTemplate } from './Buffer.types';
 export declare class BufferSchema {
     #private;
     constructor(template: BufferTemplate);

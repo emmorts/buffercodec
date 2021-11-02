@@ -10,5 +10,5 @@ export declare type BufferValueTemplate = string | string[] | BufferValueTemplat
     [key: string]: BufferValueTemplate | BufferValueTemplate[] | string | string[];
 };
 export declare type BufferTemplate = {
-    [key: string]: BufferValueTemplate | BufferValueTemplate[] | string | string[];
+    [key: string]: BufferValueTemplate;
 };

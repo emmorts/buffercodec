@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.StrategyBase = exports.BufferStrategy = exports.BufferSchema = exports.BufferCodec = void 0;
 const BufferCodec_1 = require("./BufferCodec");
-exports.BufferCodec = BufferCodec_1.BufferCodec;
+Object.defineProperty(exports, "BufferCodec", { enumerable: true, get: function () { return BufferCodec_1.BufferCodec; } });
 const BufferSchema_1 = require("./BufferSchema");
-exports.BufferSchema = BufferSchema_1.BufferSchema;
+Object.defineProperty(exports, "BufferSchema", { enumerable: true, get: function () { return BufferSchema_1.BufferSchema; } });
 const BufferStrategy_1 = require("./BufferStrategy");
-exports.BufferStrategy = BufferStrategy_1.BufferStrategy;
+Object.defineProperty(exports, "BufferStrategy", { enumerable: true, get: function () { return BufferStrategy_1.BufferStrategy; } });
 const StrategyBase_1 = require("./strategies/StrategyBase");
-exports.StrategyBase = StrategyBase_1.StrategyBase;
+Object.defineProperty(exports, "StrategyBase", { enumerable: true, get: function () { return StrategyBase_1.StrategyBase; } });

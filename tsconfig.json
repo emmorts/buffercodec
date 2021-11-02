@@ -15,13 +15,11 @@
   "typedocOptions": {
     "name": "BufferCodec",
     "out": "./docs",
-    "mode": "modules",
-    "inputFiles": [
+    "entryPoints": [
       "./lib"
     ],
-    "exclude": "**/*+(index|.spec|.e2e).ts",
+    // "exclude": "**/*+(index|.spec|.e2e).ts",
     "excludePrivate": true,
-    "excludeNotExported": true,
-    "excludeProtected": true
+    // "excludeProtected": true
   }
 }

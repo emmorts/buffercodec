@@ -11,7 +11,7 @@ const Int32Strategy_1 = require("./Int32Strategy");
 const Float32Strategy_1 = require("./Float32Strategy");
 const Float64Strategy_1 = require("./Float64Strategy");
 const StringStrategy_1 = require("./StringStrategy");
-exports.Strategies = [
+exports.default = [
     ObjectStrategy_1.default,
     ArrayStrategy_1.default,
     UInt8Strategy_1.default,

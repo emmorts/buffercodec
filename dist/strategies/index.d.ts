@@ -1,3 +1,3 @@
-import { IStrategy } from "./IStrategy";
-import { IStrategyBuilder } from "./IStrategyBuilder";
-export declare const Strategies: IStrategyBuilder<IStrategy>[];
+import { StrategyBase } from "..";
+declare const _default: (new () => StrategyBase)[];
+export default _default;

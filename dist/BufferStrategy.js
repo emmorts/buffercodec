@@ -1,12 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.BufferStrategy = void 0;
 const strategies_1 = require("./strategies");
 class BufferStrategy {
     /**
      * Encode value using template to provided buffer
-     * @param value {any} Value to encode
-     * @param template {BufferValueTemplate} Value encoding template
-     * @param bufferCodec {BufferCodec} BufferCodec containing target buffer
+     * @param value Value to encode
+     * @param template Value encoding template
+     * @param bufferCodec BufferCodec containing target buffer
      */
     static encode(value, template, bufferCodec) {
         const strategy = this.getTemplateStrategy(template);
@@ -15,7 +16,8 @@ class BufferStrategy {
     /**
      * Decode value from the buffer using template
      * @param template Value decoding template
-     * @param bufferCodec {BufferCodec} BufferCodec containing target buffer
+     * @param bufferCodec BufferCodec containing target buffer
+     * @returns Decoded value
      */
     static decode(template, bufferCodec) {
         const strategy = this.getTemplateStrategy(template);
@@ -23,8 +25,8 @@ class BufferStrategy {
     }
     /**
      * Retrieves a strategy for encoding and decoding the value
-     * @param template {BufferValueTemplate} Value template
-     * @returns {IStrategyBuilder<IStrategy>} Template codec strategy
+     * @param template Value template
+     * @returns Template codec strategy
      * @throws {Error} When strategy for provided template is not found
      */
     static getTemplateStrategy(template) {
@@ -36,8 +38,8 @@ class BufferStrategy {
     }
     /**
      * Gets options from provided value type
-     * @param type {string} Value type
-     * @returns {BufferTypeOptions & { [key: string]: any }} Type options
+     * @param type Value type
+     * @returns Type options
      * @throws {Error} When type is not provided
      */
     static getTypeOptions(type) {
@@ -63,12 +65,13 @@ class BufferStrategy {
         return options;
     }
     /**
-     * Adds a new strategy to codec
-     * @param strategy {IStrategyBuilder<IStrategy>}
+     * Adds new strategies to codec
+     * @param strategies Strategies to add
      */
-    static addStrategy(strategy) {
-        this.strategies.push(strategy);
+    static add(...strategies) {
+        this.strategies.push(...strategies.map(StrategyRef => new StrategyRef()));
     }
 }
 exports.BufferStrategy = BufferStrategy;
-BufferStrategy.strategies = [...strategies_1.Strategies];
+/** @internal */
+BufferStrategy.strategies = [...strategies_1.default.map(StrategyRef => new StrategyRef())];
