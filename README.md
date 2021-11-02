@@ -1,6 +1,6 @@
 # Buffer Codec
 
-BufferCodec is a lightweight package that allows you to efficiently and easily translate between JSON and buffers
+BufferCodec is a lightweight low-level library that allows you to efficiently and easily translate between JSON and buffers
 by chaining together calls to write basic data types to buffers and other way around. It uses 
 [Typed Arrays](https://developer.mozilla.org/en/docs/Web/JavaScript/Typed_arrays) which
 makes this package readily available for both, browsers and Node environments.
