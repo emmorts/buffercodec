@@ -25,10 +25,21 @@ jobs:
         run: npm ci
       - name: Run tests
         run: npm test
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: buffercodec
+          path: |
+            dist
+            docs
   publish-docs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: buffercodec
       - name: Deploy to GitHub Pages
         if: success()
         uses: crazy-max/ghaction-github-pages@v2
