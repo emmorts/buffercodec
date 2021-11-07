@@ -1,14 +1,12 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Publish package
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  release:
+    # This specifies that the build will be triggered when we publish a release
+    types: [published]
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -18,6 +16,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          # "ref" specifies the branch to check out.
+          # "github.event.release.target_commitish" is a global variable and specifies the branch the release targeted
+          ref: ${{ github.event.release.target_commitish }}
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
@@ -43,6 +45,8 @@ jobs:
         with:
           node-version: '14'
           registry-url: 'https://registry.npmjs.org'
+      - name: Bump version
+        run: npm version ${{ github.event.release.tag_name }}
       - name: Publish to npmjs
         run: npm publish
         env:
