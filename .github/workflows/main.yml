@@ -58,6 +58,12 @@ jobs:
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # push the version changes to GitHub
+      - name: Push version changes
+        run: git push
+        env:
+          # The secret is passed automatically. Nothing to configure.
+          github-token: ${{ secrets.GITHUB_TOKEN }}
   publish-docs:
     needs: build
     runs-on: ubuntu-latest
